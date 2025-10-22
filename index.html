@@ -187,25 +187,33 @@
 }
 
   .ganador {
-    position:fixed;
-    left:50%;
-    top:10%;
-    transform:translateX(-50%);
-    background: rgba(0,0,0,0.85);
-    color: gold;
-    padding:1rem 1.4rem;
-    border-radius:12px;
-    font-size:1.25rem;
-    display:none;
-    box-shadow: 0 0 14px gold;
-    z-index:999;
-  }
-  .ganador.activo { display:block; }
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: rgba(0, 0, 0, 0.85);
+  color: #ffd700; /* dorado */
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-align: center;
+  display: none;
+  box-shadow: 0 0 20px gold, 0 0 40px rgba(255, 215, 0, 0.4);
+  z-index: 999;
+  animation: popin 0.5s forwards;
+}
 
-  @media (max-width:560px){
-    .tablero{ grid-template-columns: 1fr; }
-    .tablero-juego{ grid-template-columns: 1fr; }
-  }
+.ganador.activo {
+  display: block;
+}
+
+/* Animación pop-in */
+@keyframes popin {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
 </style>
 </head>
 <body>
@@ -711,6 +719,8 @@ if(data.jugadores.some(j => j.puntos > 0)) {
         const jugadorDiv = document.querySelector(`#tableroJuego .jugador-juego:nth-child(${idx+1})`);
         if(jugadorDiv) jugadorDiv.dataset.faccion = j.faccion;
     });
+  
+    chequearGanador();
 }
     });
 
@@ -731,6 +741,7 @@ if(data.jugadores.some(j => j.puntos > 0)) {
 
 </body>
 </html>
+
 
 
 
