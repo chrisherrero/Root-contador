@@ -647,7 +647,7 @@ function chequearGanador(){
   if(ganadorIdx !== -1){
     const nombres = Array.from(document.querySelectorAll('#tableroJuego .nombre-juego')).map(n=>n.value);
     const ganador = nombres[ganadorIdx] || `Jugador ${ganadorIdx+1}`;
-    mensajeGanadorDiv.textContent = `🎉 ¡${ganador} ganó la partida con ${puntos[ganadorIdx]} puntos! 🎉`;
+    mensajeGanadorDiv.textContent = ` ¡${ganador} ganó la partida con ${puntos[ganadorIdx]} puntos! `;
     mensajeGanadorDiv.classList.add('activo');
     // opcional: desactivar botones (si vos querés que siga el juego sacalo)
     Array.from(document.querySelectorAll('#tableroJuego .botones button')).forEach(b => b.disabled = true);
@@ -741,6 +741,7 @@ if(data.jugadores.some(j => j.puntos > 0)) {
 
 </body>
 </html>
+
 
 
 
