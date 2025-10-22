@@ -566,6 +566,7 @@ function comenzarPartida(){
     div.style.background = j.color;
     // texto claro u oscuro según contraste
     const textoClaro = esColorOscuro(j.color) ? '#fff' : '#000';
+    div.dataset.faccion = j.faccion;
 
     const nombreInput = document.createElement('input');
     nombreInput.className = 'nombre-juego';
@@ -662,8 +663,6 @@ function guardarEstadoJuego() {
     localStorage.setItem('rootJuego', JSON.stringify(estado));
 }
 
-}
-
 /* volver a configuracion */
 function volverAConfig(){
   localStorage.removeItem('rootJuego'); // limpiar el estado guardado
@@ -702,6 +701,17 @@ window.addEventListener('load', ()=>{
       const card = select.closest('.jugador');
       card.querySelector('.nombre-j').value = j.nombre;
       select.value = j.faccion || ''; 
+      // Restaurar pantalla de juego si había puntos guardados
+if(data.jugadores.some(j => j.puntos > 0)) {
+    comenzarPartida();  // reconstruye la pantalla de juego
+
+    const puntosDivsJuego = Array.from(document.querySelectorAll('#tableroJuego .puntos'));
+    data.jugadores.forEach((j, idx) => {
+        if(puntosDivsJuego[idx]) puntosDivsJuego[idx].textContent = j.puntos || 0;
+        const jugadorDiv = document.querySelector(`#tableroJuego .jugador-juego:nth-child(${idx+1})`);
+        if(jugadorDiv) jugadorDiv.dataset.faccion = j.faccion;
+    });
+}
     });
 
     manejarCambio();
@@ -721,6 +731,7 @@ window.addEventListener('load', ()=>{
 
 </body>
 </html>
+
 
 
 
