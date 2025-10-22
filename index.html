@@ -776,9 +776,10 @@ if(data.jugadores.some(j => j.puntos > 0)) {
       </a>
     </div>
 
-    <button id="closePrep" class="mt-4 bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
-      Cerrar
-    </button>
+  <button id="closePrep"
+  class="absolute top-3 right-3 bg-gray-700/80 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg transition">
+  ✕
+  </button>
   </div>
 </div>
 
@@ -791,9 +792,10 @@ if(data.jugadores.some(j => j.puntos > 0)) {
     <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 underline font-semibold hover:text-blue-300 block mb-4">
       Reglas del juego
     </a>
-    <button id="closeDetails" class="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
-      Cerrar
-    </button>
+  <button id="closeDetails"
+  class="absolute top-3 right-3 bg-gray-700/80 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg transition">
+  ✕
+  </button>
   </div>
 </div>
 
@@ -946,5 +948,6 @@ overlay.addEventListener("click", () => {
 
 </body>
 </html>
+
 
 
