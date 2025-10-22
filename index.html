@@ -655,7 +655,12 @@ function guardarEstadoJuego() {
     });
     const maxP = parseInt(maxPuntosInput.value) || 30;
     const numJugadores = parseInt(numJugadoresSelect.value);
-    localStorage.setItem('rootJuego', JSON.stringify({ jugadores, maxP }));
+    const validarAlcance = switchAlcance.checked;
+    
+    const estado = { jugadores, maxP, numJugadores, validarAlcance };
+    localStorage.setItem('rootJuego', JSON.stringify(estado));
+}
+
 }
 
 /* volver a configuracion */
@@ -706,6 +711,7 @@ window.addEventListener('load', ()=>{
 
 </body>
 </html>
+
 
 
 
