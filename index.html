@@ -750,18 +750,199 @@ if(data.jugadores.some(j => j.puntos > 0)) {
 </script>
 
 
-<!-- =========================
-     Preparaciones — Versión simplificada
-     ========================= -->
+<!-- =========================================================
+     Preparaciones (versión limpia)
+     Pegar antes del </body>
+========================================================= -->
 
-<!-- Botón para abrir las preparaciones -->
-<button id="openPreparations"
-  class="fixed top-4 right-4 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-xl shadow-md transition">
+<!-- Botón flotante -->
+<button id="openPreparations" class="fixed top-4 right-4 bg-gray-700 text-white px-4 py-2 rounded-xl shadow-md hover:bg-gray-600 transition">
   Preparaciones
 </button>
 
-<!-- Fondo translúcido con blur -->
-<div id
+<!-- Fondo gris traslúcido -->
+<div id="prepOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-40"></div>
+
+<!-- Ventana principal con lista -->
+<div id="prepWindow" class="hidden fixed inset-0 flex items-center justify-center z-50">
+  <div class="bg-gray-900/90 backdrop-blur-lg rounded-2xl p-6 w-[90%] max-w-md text-center shadow-xl max-h-[80vh] overflow-y-auto custom-scroll">
+    <h2 class="text-2xl font-bold text-white mb-4">Preparaciones</h2>
+    <div id="prepList" class="flex flex-col gap-5"></div>
+
+    <div class="mt-6">
+      <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 underline font-semibold hover:text-blue-300">
+        Reglas del juego
+      </a>
+    </div>
+
+    <button id="closePrep" class="mt-4 bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+      Cerrar
+    </button>
+  </div>
+</div>
+
+<!-- Ventana de detalle -->
+<div id="prepDetails" class="hidden fixed inset-0 flex items-center justify-center z-50">
+  <div class="bg-gray-900/95 backdrop-blur-lg rounded-2xl p-6 w-[90%] max-w-md text-center shadow-xl">
+    <h3 id="detailsTitle" class="text-xl font-bold text-white mb-2"></h3>
+    <p id="detailsMode" class="text-sm text-gray-400 mb-4"></p>
+    <div id="detailsText" class="text-gray-100 whitespace-pre-line mb-4"></div>
+    <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 underline font-semibold hover:text-blue-300 block mb-4">
+      Reglas del juego
+    </a>
+    <button id="closeDetails" class="bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+      Cerrar
+    </button>
+  </div>
+</div>
+
+<!-- Scroll estilizado -->
+<style>
+  .custom-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+  .custom-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+</style>
+
+<!-- ================= Script ================= -->
+<script>
+const prepData = {
+  "Marquesado": {
+    normal: `Coloca la Fortaleza en un claro de esquina.
+Coloca un guerrero en cada claro excepto el opuesto.
+Coloca 1 aserradero, 1 taller y 1 reclutador.`,
+    avanzada: `Elige tres claros de hogar adyacentes.
+Coloca 3 guerreros en cada hogar.
+Coloca un edificio diferente en cada uno.`
+  },
+  "Nido de Águilas": {
+    normal: `Coloca 1 nido y 6 guerreros en una esquina no ocupada.
+Elige un líder y coloca tus Visires.`,
+    avanzada: `Elige un claro de hogar en el borde.
+Coloca 6 guerreros y 1 nido.
+Configura tu decreto inicial.`
+  },
+  "Alianza del Bosque": {
+    normal: `Coloca 3 bases en tus espacios de bases.
+Rellena el registro de simpatía.
+Roba 3 cartas y colócalas boca abajo.`,
+    avanzada: `Llena tus registros de simpatía.
+Coloca tus 3 bases en los espacios correspondientes.`
+  },
+  "Vagabundo": {
+    normal: `Elige un personaje y colócalo en un bosque.
+Roba 3 misiones y colócalas boca arriba.`,
+    avanzada: `Pon tu peón en un bosque.
+Roba 3 misiones y configura tus objetos iniciales.`
+  },
+  "Compañía del Río": {
+    normal: `Coloca 4 guerreros conectados al río.
+Rellena los puestos comerciales.`,
+    avanzada: `Pon 4 guerreros en claros del río.
+Configura los precios de tus servicios.`
+  },
+  "Culto Reptiliano": {
+    normal: `Coloca 4 guerreros y 1 jardín en una esquina no ocupada.
+Coloca 1 guerrero en cada claro adyacente.`,
+    avanzada: `Elige un claro no adyacente a enemigos.
+Coloca 4 guerreros y 1 jardín.`
+  },
+  "Ducado Subterráneo": {
+    normal: `Coloca tu tablero de madriguera cerca del mapa.
+Coloca 2 guerreros y 1 túnel en una esquina.`,
+    avanzada: `Elige un claro no adyacente a enemigos.
+Coloca 6 guerreros y 1 túnel en tu hogar.`
+  },
+  "Conspiración Córvida": {
+    normal: `Coloca 1 guerrero en un claro de cada palo.`,
+    avanzada: `Elige un hogar y coloca 1 ficha de trama boca abajo.`
+  },
+  "Señor de los Cientos": {
+    normal: `Coloca tu señor, 4 guerreros y 1 bastión en una esquina.`,
+    avanzada: `Elige un hogar, coloca 4 guerreros y 1 fortaleza.`
+  },
+  "Guardianes de Hierro": {
+    normal: `Baraja las fichas de reliquia y coloca una en cada bosque.`,
+    avanzada: `Elige 2 claros adyacentes, coloca 4 guerreros en cada uno.`
+  }
+};
+
+// Elementos
+const openBtn = document.getElementById("openPreparations");
+const overlay = document.getElementById("prepOverlay");
+const prepWindow = document.getElementById("prepWindow");
+const prepList = document.getElementById("prepList");
+const closePrep = document.getElementById("closePrep");
+const details = document.getElementById("prepDetails");
+const detailsTitle = document.getElementById("detailsTitle");
+const detailsMode = document.getElementById("detailsMode");
+const detailsText = document.getElementById("detailsText");
+const closeDetails = document.getElementById("closeDetails");
+
+// Mostrar lista
+openBtn.addEventListener("click", () => {
+  prepList.innerHTML = "";
+  Object.entries(prepData).forEach(([faction, data]) => {
+    const div = document.createElement("div");
+    div.className = "bg-gray-800/60 p-3 rounded-xl text-white shadow-md";
+    div.innerHTML = `
+      <div class="text-lg font-semibold mb-2">${faction}</div>
+      <div class="flex justify-center gap-2">
+        <button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="normal">Normal</button>
+        <button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="avanzada">Avanzada</button>
+      </div>
+    `;
+    prepList.appendChild(div);
+  });
+
+  overlay.classList.remove("hidden");
+  prepWindow.classList.remove("hidden");
+});
+
+// Cerrar lista
+closePrep.addEventListener("click", () => {
+  overlay.classList.add("hidden");
+  prepWindow.classList.add("hidden");
+});
+
+// Mostrar detalle
+prepList.addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-faction]");
+  if (!btn) return;
+
+  const faction = btn.dataset.faction;
+  const mode = btn.dataset.mode;
+  const text = prepData[faction][mode];
+
+  detailsTitle.textContent = faction;
+  detailsMode.textContent = mode === "normal" ? "Preparación Básica" : "Preparación Avanzada";
+  detailsText.textContent = text;
+
+  prepWindow.classList.add("hidden");
+  details.classList.remove("hidden");
+});
+
+// Cerrar detalle
+closeDetails.addEventListener("click", () => {
+  details.classList.add("hidden");
+  prepWindow.classList.remove("hidden");
+});
+
+// Cerrar todo con overlay
+overlay.addEventListener("click", () => {
+  overlay.classList.add("hidden");
+  prepWindow.classList.add("hidden");
+  details.classList.add("hidden");
+});
+</script>
+
 
 </body>
 </html>
+
