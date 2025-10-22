@@ -654,7 +654,8 @@ function guardarEstadoJuego() {
         };
     });
     const maxP = parseInt(maxPuntosInput.value) || 30;
-    localStorage.setItem('rootGame', JSON.stringify({ jugadores, maxP }));
+    const numJugadores = parseInt(numJugadoresSelect.value);
+    localStorage.setItem('rootJuego', JSON.stringify({ jugadores, maxP }));
 }
 
 /* volver a configuracion */
@@ -705,6 +706,7 @@ window.addEventListener('load', ()=>{
 
 </body>
 </html>
+
 
 
 
