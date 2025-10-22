@@ -613,11 +613,13 @@ div.appendChild(botones);
       pts++;
       puntosDiv.textContent = pts;
       chequearGanador();
+      guardarEstadoJuego();
     });
     btnMenos.addEventListener('click', ()=>{
       let pts = parseInt(puntosDiv.textContent) || 0;
       pts = Math.max(0, pts-1);
       puntosDiv.textContent = pts;
+      guardarEstadoJuego();
     });
   });
 
@@ -642,9 +644,23 @@ function chequearGanador(){
     Array.from(document.querySelectorAll('#tableroJuego .botones button')).forEach(b => b.disabled = true);
   }
 }
+/* guardar estado del juego en localStorage */
+function guardarEstadoJuego() {
+    const jugadores = Array.from(document.querySelectorAll('#tableroJuego .jugador-juego')).map(j => {
+        return {
+            nombre: j.querySelector('.nombre-juego').value,
+            color: j.style.background,
+            puntos: parseInt(j.querySelector('.puntos').textContent) || 0
+        };
+    });
+    const maxP = parseInt(maxPuntosInput.value) || 30;
+    localStorage.setItem('rootGame', JSON.stringify({ jugadores, maxP }));
+}
 
 /* volver a configuracion */
 function volverAConfig(){
+  localStorage.removeItem('rootJuego'); // limpiar el estado guardado
+  
   pantallaJuego.classList.remove('activa');
   pantallaJuego.classList.add('pantalla');
   pantallaConfig.classList.remove('pantalla');
@@ -659,10 +675,37 @@ generarTablero();
 
 /* Exponer una función por si querés recargar desde consola */
 window.regenerar = generarTablero;
+// Restaurar juego al recargar la página
+window.addEventListener('load', ()=>{
+  const estado = localStorage.getItem('rootJuego');
+  if(estado){
+    const data = JSON.parse(estado);
+    maxPuntosInput.value = data.maxPuntos;
+    numJugadoresSelect.value = data.numJugadores;
+    generarTablero();
+
+    // aplicar nombres y facciones guardadas
+    data.jugadores.forEach((j, idx)=>{
+      const card = document.querySelector(`#faccionSelect_${idx}`).closest('.jugador');
+      card.querySelector('.nombre-j').value = j.nombre;
+      document.querySelector(`#faccionSelect_${idx}`).value = j.faccion;
+    });
+    manejarCambio();
+
+    // reconstruir pantalla de juego
+    comenzarPartida();
+    const puntosDivs = Array.from(document.querySelectorAll('#tableroJuego .puntos'));
+    puntosDivs.forEach((pDiv, idx)=>{
+      pDiv.textContent = data.jugadores[idx].puntos;
+    });
+  }
+});
+
 </script>
 
 </body>
 </html>
+
 
 
 
