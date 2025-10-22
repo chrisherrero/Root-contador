@@ -769,11 +769,11 @@ if(data.jugadores.some(j => j.puntos > 0)) {
 <script>
 // Datos completos de Preparaciones
 const prepData = {
-  "Marquesa de Gato": {
+  "Marquesado": {
     normal:"Colocar la Fortaleza: Coloca la ficha de la fortaleza en un claro de una esquina a tu elección. Este es tu claro inicial.\nGuarnición: Coloca un guerrero en cada claro excepto el claro diagonalmente opuesto.\nEdificios Iniciales: Coloca 1 aserradero, 1 taller y 1 reclutador en tu claro inicial o adyacentes.\nRellenar Contadores: Coloca los contadores restantes de derecha a izquierda, dejando el más a la izquierda vacío.",
     avanzada:"Elige 3 claros de hogar adyacentes.\nPon 3 guerreros en cada hogar, 1 en cada otro claro.\nPon la ficha de Torreón en un hogar no adyacente a enemigos si es posible.\nPon 1 aserradero, 1 taller y 1 reclutador en cada claro de hogar diferente.\nLlena tu registro de Edificios con tus edificios excepto los espacios más a la izquierda."
   },
-  "Dinastías del Nido": {
+  "Nido de Aguilas": {
     normal:"Coloca 1 nido y 6 guerreros en un claro de esquina no ocupado y diagonalmente opuesto a otro claro inicial.\nEscoger Líder: Elige 1 carta de líder y colócala en tu espacio.\nColocar Visires: Pon 2 Visires Leales según tu líder.\nRellenar Contador: Coloca los 6 nidos restantes de derecha a izquierda.",
     avanzada:"Elige un claro de hogar en el borde con 3+ claros entre él y hogares enemigos.\nPon 6 guerreros y 1 nido en tu hogar.\nColoca cualquier carta de Líder en tu espacio.\nMete 2 Visires Leales bajo el espacio de columnas del Decreto según tu líder.\nLlena tus espacios de Nidos, excepto el de más a la izquierda."
   },
@@ -789,7 +789,7 @@ const prepData = {
     normal:"Desembarcar: Coloca 4 guerreros en claros conectados al río.\nRellenar los Contadores de Puesto Comercial: Coloca 9 puestos.\nObtener Fondos Iniciales: Coloca 3 guerreros en zona de pagos.\nPrecios iniciales: Coloca 1 marcador de servicio en cada contador.",
     avanzada:"Pon 4 guerreros entre claros a lo largo del río.\nPon 3 guerreros en tu caja de Pagos.\nLlena los registros de Puestos de Comercio.\nPon 3 marcadores de servicio en tu registro de Servicios, estableciendo un precio."
   },
-  "Culto de los Lagartos": {
+  "Culto Reptiliano": {
     normal:"Coloca Guerreros: En un claro de esquina no ocupado, coloca 4 guerreros y 1 jardín.\nElegir al Paria: Coloca marcador de paria en la zona correspondiente.\nRellenar Contadores de Jardines: Coloca 14 jardines restantes de derecha a izquierda.",
     avanzada:"Elige un claro no adyacente a enemigos.\nPon 4 guerreros y 1 jardín en tu hogar.\nPon 2 guerreros en claros adyacentes.\nPon 2 guerreros en tu caja de Acólitos.\nLlena registros de Jardines, excepto el espacio más a la izquierda.\nPon tu marcador de paria en su lado correspondiente."
   },
@@ -811,98 +811,75 @@ const prepData = {
   }
 };
 
-// Elementos
-const modal = document.getElementById("prepModal");
-const openBtn = document.getElementById("openPrepModal");
-const closeBtn = document.getElementById("closePrepModal");
-const selectionContainer = document.getElementById("selectionContainer");
-const instructionContainer = document.getElementById("instructionContainer");
+const openPreparationsBtn = document.getElementById("openPreparations");
+const overlay = document.getElementById("prepOverlay");
+const prepWindow = document.getElementById("prepWindow");
+const closeBtn = document.getElementById("closePrep");
+const prepList = document.getElementById("prepList");
+const prepDetails = document.getElementById("prepDetails");
+const closeDetails = document.getElementById("closeDetails");
+const detailsText = document.getElementById("detailsText");
 
-// Crear lista de facciones con botones divididos
-for (let faction in prepData) {
-  const row = document.createElement("div");
-  row.style.display = "flex";
-  row.style.flexDirection = "column";
-  row.style.alignItems = "center";
-  row.style.marginBottom = "10px";
-  
-  const title = document.createElement("div");
-  title.innerText = faction;
-  title.style.fontWeight = "bold";
-  title.style.fontSize = "16px";
-  title.style.marginBottom = "6px";
-  
-  const buttonWrapper = document.createElement("div");
-  buttonWrapper.style.display = "flex";
-  buttonWrapper.style.borderRadius = "12px";
-  buttonWrapper.style.overflow = "hidden";
-  buttonWrapper.style.boxShadow = "0 3px 7px rgba(0,0,0,0.4)";
-  buttonWrapper.style.width = "80%";
-  
-  const normalBtn = document.createElement("button");
-  normalBtn.innerText = "Normal";
-  normalBtn.style.flex="1";
-  normalBtn.style.padding="10px 0";
-  normalBtn.style.border="none";
-  normalBtn.style.cursor="pointer";
-  normalBtn.style.background="#2ecc71";
-  normalBtn.style.color="#fff";
-  normalBtn.style.transition="0.3s";
-  normalBtn.onmouseover = ()=> normalBtn.style.background="#27ae60";
-  normalBtn.onmouseout = ()=> normalBtn.style.background="#2ecc71";
-  normalBtn.addEventListener("click", () => showInstruction(faction, "normal"));
-  
-  const advBtn = document.createElement("button");
-  advBtn.innerText = "Avanzada";
-  advBtn.style.flex="1";
-  advBtn.style.padding="10px 0";
-  advBtn.style.border="none";
-  advBtn.style.cursor="pointer";
-  advBtn.style.background="#e67e22";
-  advBtn.style.color="#fff";
-  advBtn.style.transition="0.3s";
-  advBtn.onmouseover = ()=> advBtn.style.background="#d35400";
-  advBtn.onmouseout = ()=> advBtn.style.background="#e67e22";
-  advBtn.addEventListener("click", () => showInstruction(faction, "avanzada"));
-  
-  buttonWrapper.appendChild(normalBtn);
-  buttonWrapper.appendChild(advBtn);
-  
-  row.appendChild(title);
-  row.appendChild(buttonWrapper);
-  
-  selectionContainer.appendChild(row);
-}
+// Abrir lista de facciones
+openPreparationsBtn.addEventListener("click", () => {
+  overlay.classList.remove("hidden");
+  prepWindow.classList.remove("hidden");
+  prepList.innerHTML = "";
 
-// Mostrar instrucción en la misma ventana
-function showInstruction(faction, type){
-  instructionContainer.style.display = "block";
-  instructionContainer.innerHTML = `<h3 style="text-align:center;color:#f1c40f;">${faction} - ${type.charAt(0).toUpperCase()+type.slice(1)}</h3><p style="white-space:pre-wrap; line-height:1.5;">${prepData[faction][type]}</p>`;
-  selectionContainer.style.display = "none";
-}
+  Object.keys(prepData).forEach(faction => {
+    const div = document.createElement("div");
+    div.className = "flex justify-between items-center bg-gray-800/80 backdrop-blur-md rounded-xl p-3 mb-2";
+    div.innerHTML = `
+      <span class="text-white font-semibold">${faction}</span>
+      <div class="flex bg-gray-700 rounded-lg overflow-hidden">
+        <button class="px-3 py-1 hover:bg-gray-600 text-sm text-gray-100 border-r border-gray-600" data-faction="${faction}" data-mode="normal">Normal</button>
+        <button class="px-3 py-1 hover:bg-gray-600 text-sm text-gray-100" data-faction="${faction}" data-mode="avanzada">Avanzada</button>
+      </div>
+    `;
+    prepList.appendChild(div);
+  });
 
-// Abrir/Cerrar Modal con animación
-openBtn.addEventListener("click", () => {
-  modal.style.display = "flex";
-  prepContent.style.transform="translateY(-50px)";
-  prepContent.style.opacity="0";
-  selectionContainer.style.display = "flex";
-  instructionContainer.style.display = "none";
-  setTimeout(()=> {
-    prepContent.style.transform="translateY(0)";
-    prepContent.style.opacity="1";
-  },50);
+  // Agregar el enlace de reglas al final de la lista
+  const rulesDiv = document.createElement("div");
+  rulesDiv.className = "mt-4 text-center";
+  rulesDiv.innerHTML = `
+    <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 hover:text-blue-300 underline text-lg font-semibold">Reglas del juego</a>
+  `;
+  prepList.appendChild(rulesDiv);
 });
 
+// Cerrar lista de facciones
 closeBtn.addEventListener("click", () => {
-  prepContent.style.transform="translateY(-50px)";
-  prepContent.style.opacity="0";
-  setTimeout(()=> modal.style.display="none", 300);
+  overlay.classList.add("hidden");
+  prepWindow.classList.add("hidden");
+});
+
+// Mostrar detalles
+prepList.addEventListener("click", e => {
+  if (e.target.tagName === "BUTTON") {
+    const faction = e.target.dataset.faction;
+    const mode = e.target.dataset.mode;
+    const text = prepData[faction][mode];
+    detailsText.innerHTML = `
+      <h2 class="text-xl font-bold mb-2 text-white">${faction} (${mode === "normal" ? "Preparación Básica" : "Preparación Avanzada"})</h2>
+      <p class="text-gray-200 mb-4">${text}</p>
+      <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 hover:text-blue-300 underline text-lg font-semibold">Reglas del juego</a>
+    `;
+    prepWindow.classList.add("hidden");
+    prepDetails.classList.remove("hidden");
+  }
+});
+
+// Cerrar detalles
+closeDetails.addEventListener("click", () => {
+  prepDetails.classList.add("hidden");
+  overlay.classList.add("hidden");
 });
 </script>
 
 </body>
 </html>
+
 
 
 
