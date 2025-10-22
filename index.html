@@ -649,6 +649,7 @@ function guardarEstadoJuego() {
     const jugadores = Array.from(document.querySelectorAll('#tableroJuego .jugador-juego')).map(j => {
         return {
             nombre: j.querySelector('.nombre-juego').value,
+            faccion: j.dataset.faccion,
             color: j.style.background,
             puntos: parseInt(j.querySelector('.puntos').textContent) || 0
         };
@@ -686,31 +687,41 @@ window.addEventListener('load', ()=>{
   const estado = localStorage.getItem('rootJuego');
   if(estado){
     const data = JSON.parse(estado);
-    maxPuntosInput.value = data.maxPuntos;
-    numJugadoresSelect.value = data.numJugadores;
+
+    // Restaurar configuración
+    maxPuntosInput.value = data.maxP || 30;
+    numJugadoresSelect.value = data.numJugadores || 4;
+    switchAlcance.checked = data.validarAlcance ?? true;
+
+    // Generar tablero según cantidad de jugadores
     generarTablero();
 
-    // aplicar nombres y facciones guardadas
+    // Restaurar nombres y facciones
     data.jugadores.forEach((j, idx)=>{
-      const card = document.querySelector(`#faccionSelect_${idx}`).closest('.jugador');
+      const select = document.querySelector(`#faccionSelect_${idx}`);
+      const card = select.closest('.jugador');
       card.querySelector('.nombre-j').value = j.nombre;
-      document.querySelector(`#faccionSelect_${idx}`).value = j.faccion;
+      select.value = j.faccion || ''; 
     });
+
     manejarCambio();
 
-    // reconstruir pantalla de juego
-    comenzarPartida();
-    const puntosDivs = Array.from(document.querySelectorAll('#tableroJuego .puntos'));
+    // Si hay puntos guardados, restaurarlos
+    const puntosDivs = Array.from(document.querySelectorAll('#tablero .puntos'));
     puntosDivs.forEach((pDiv, idx)=>{
-      pDiv.textContent = data.jugadores[idx].puntos;
+      if(data.jugadores[idx]) pDiv.textContent = data.jugadores[idx].puntos || '';
     });
+
+    // La pantalla queda en configuración, no saltamos automáticamente a juego
   }
 });
+
 
 </script>
 
 </body>
 </html>
+
 
 
 
