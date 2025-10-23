@@ -820,11 +820,17 @@ if(data.jugadores.some(j => j.puntos > 0)) {
       <h2 class="text-2xl font-bold text-white mb-4">Preparaciones</h2>
       <div id="prepList" class="flex flex-col gap-5"></div>
 
-      <div class="mt-6">
+      <div class="mt-6 flex justify-between">
         <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 underline font-semibold hover:text-blue-300">
-          Reglas del juego
+        Reglas del juego
+        </a>
+        <a href="#" id="showQR" class="text-blue-400 underline font-semibold hover:text-blue-300 cursor-pointer">
+          QR
         </a>
       </div>
+      <div id="qrContainer" class="mt-4 hidden">
+  <img src="rootIcon/QR.png" alt="QR" class="w-32 h-32 mx-auto">
+</div>
     </div>
 
   </div>
@@ -1130,7 +1136,45 @@ overlay.addEventListener("click", () => {
   details.classList.add("hidden");
 });
 </script>
+<div id="qrModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="relative bg-white p-4 rounded-lg shadow-lg">
+    <!-- Botón de cerrar -->
+    <button id="closeQR" class="absolute -top-4 -right-4 w-10 h-10 rounded-full bg-blue-800 text-white flex items-center justify-center text-2xl font-bold hover:bg-blue-700 transform hover:scale-110 hover:rotate-12 transition duration-200">
+      &times;
+    </button>
+    <!-- Imagen QR -->
+    <img src="/rootIcon/QR.png" alt="QR" class="w-64 h-64 mx-auto">
+  </div>
+</div>
 
+<!-- Script -->
+<script>
+  const qrLink = document.getElementById('showQR');
+  const qrModal = document.getElementById('qrModal');
+  const closeQR = document.getElementById('closeQR');
+
+  // Mostrar modal al hacer clic
+  qrLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    qrModal.classList.remove('hidden');
+    qrModal.classList.add('flex');
+  });
+
+  // Cerrar modal
+  closeQR.addEventListener('click', function() {
+    qrModal.classList.add('hidden');
+    qrModal.classList.remove('flex');
+    
+  });
+
+  // Opcional: cerrar si hace clic fuera del contenido
+  qrModal.addEventListener('click', function(e) {
+    if (e.target === qrModal) {
+      qrModal.classList.add('hidden');
+      qrModal.classList.remove('flex');
+    }
+  });
+</script>
 
 </body>
 </html>
