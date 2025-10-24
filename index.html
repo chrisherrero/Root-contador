@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8" />
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Contador de Root - Completo</title>
   
 <style>
   :root{
     --bg-madera: #2c1d10;
-    --panel: rgba(50,35,20,0.92);
+    --panel: rgba(50, 35, 20, 0.92);
     --acento: #dca45c;
     --boton: #d28b45;
     --boton-hover: #e59d52;
@@ -31,7 +32,16 @@
     align-items:center;
     padding:1.2rem;
   }
-  h1{ margin:0.5rem 0 1rem 0; text-shadow:2px 2px 3px #000; font-size:clamp(1.4rem,3.8vw,2rem); }
+  h1{ margin:0.5rem 0 1rem 0; 
+    font-size:clamp(1.4rem, 3.8vw, 2.1rem); 
+    
+    color: var(--acento); 
+    font-weight: 700; 
+    letter-spacing: 0.025em; 
+    text-shadow: 
+      1px 1px 1px rgba(0,0,0,0.7), 
+      0 0 6px var(--acento); 
+    }
 
   /* Contenedor principal */
   .contenedor {
@@ -63,6 +73,8 @@
   #numJugadores {
     background: rgba(255,255,255,0.95);
     color: #000;
+    font-size: 1.1rem;
+    padding: 0.5rem 0.7rem;
 }
   .switch {
     display:flex;
@@ -241,6 +253,11 @@
   60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
   100% { transform: translate(-50%, -50%) scale(1); }
 }
+
+body.no-scroll {
+  overflow: hidden;
+}
+
 </style>
   
 <link rel="icon" type="image/png" href="rootIcon/favicon-96x96.png" sizes="96x96" />
@@ -476,11 +493,6 @@ facciones.forEach(f => {
   manejarCambio();
 }
 
-/* obtiene array de nombres seleccionados en orden */
-function obtenerSeleccionadas(){
-  const selects = Array.from(document.querySelectorAll("select[id^='faccionSelect_']"));
-  return selects.map(s=>s.value);
-}
 
 /* maneja cambios: evita duplicados, actualiza colores de card y alcances por select */
 function manejarCambio(){
@@ -747,49 +759,45 @@ generarTablero();
 /* Exponer una función por si querés recargar desde consola */
 window.regenerar = generarTablero;
 // Restaurar juego al recargar la página
+
 window.addEventListener('load', ()=>{
   const estado = localStorage.getItem('rootJuego');
   if(estado){
     const data = JSON.parse(estado);
 
-    // Restaurar configuración
     maxPuntosInput.value = data.maxP || 30;
     numJugadoresSelect.value = data.numJugadores || 4;
     switchAlcance.checked = data.validarAlcance ?? true;
 
-    // Generar tablero según cantidad de jugadores
     generarTablero();
 
-    // Restaurar nombres y facciones
-    data.jugadores.forEach((j, idx)=>{
-      const select = document.querySelector(`#faccionSelect_${idx}`);
+    const selectsConfig = Array.from(document.querySelectorAll("select[id^='faccionSelect_']"));
+    selectsConfig.forEach((select, idx) => {
+      if (!data.jugadores[idx]) return; // Seguridad
+      const j = data.jugadores[idx];
       const card = select.closest('.jugador');
       card.querySelector('.nombre-j').value = j.nombre;
-      select.value = j.faccion || ''; 
-      // Restaurar pantalla de juego si había puntos guardados
-if(data.jugadores.some(j => j.puntos > 0)) {
-    comenzarPartida();  // reconstruye la pantalla de juego
-
-    const puntosDivsJuego = Array.from(document.querySelectorAll('#tableroJuego .puntos'));
-    data.jugadores.forEach((j, idx) => {
-        if(puntosDivsJuego[idx]) puntosDivsJuego[idx].textContent = j.puntos || 0;
-        const jugadorDiv = document.querySelector(`#tableroJuego .jugador-juego:nth-child(${idx+1})`);
-        if(jugadorDiv) jugadorDiv.dataset.faccion = j.faccion;
-    });
-  
-    chequearGanador();
-}
+      select.value = j.faccion || '';
+      card.querySelector('.puntos').textContent = j.puntos > 0 ? j.puntos : '';
     });
 
     manejarCambio();
 
-    // Si hay puntos guardados, restaurarlos
-    const puntosDivs = Array.from(document.querySelectorAll('#tablero .puntos'));
-    puntosDivs.forEach((pDiv, idx)=>{
-      if(data.jugadores[idx]) pDiv.textContent = data.jugadores[idx].puntos || '';
-    });
+    const hayPartidaGuardada = data.jugadores.some(j => j.puntos > 0);
 
-    // La pantalla queda en configuración, no saltamos automáticamente a juego
+    if (hayPartidaGuardada) {
+
+      comenzarPartida();
+
+      const puntosDivsJuego = Array.from(document.querySelectorAll('#tableroJuego .puntos'));
+      puntosDivsJuego.forEach((puntosDiv, idx) => {
+        if (data.jugadores[idx]) {
+                  puntosDiv.textContent = data.jugadores[idx].puntos || 0;
+        }
+      });
+
+      chequearGanador();
+    }
   }
 });
 
@@ -824,17 +832,16 @@ if(data.jugadores.some(j => j.puntos > 0)) {
         <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 underline font-semibold hover:text-blue-300">
         Reglas del juego
         </a>
-        <a href="#" id="showQR" class="text-blue-400 underline font-semibold hover:text-blue-300 cursor-pointer">
+        <a href="#" class="text-blue-400 underline font-semibold hover:text-blue-300 cursor-pointer showQR-trigger">
           QR
         </a>
       </div>
-      <div id="qrContainer" class="mt-4 hidden">
-  <img src="rootIcon/QR.png" alt="QR" class="w-32 h-32 mx-auto">
+      
 </div>
     </div>
 
   </div>
-</div>
+
 
 <!-- Ventana de detalle -->
 <div id="prepDetails" class="hidden fixed inset-0 flex items-center justify-center z-50">
@@ -850,10 +857,16 @@ if(data.jugadores.some(j => j.puntos > 0)) {
       <h3 id="detailsTitle" class="text-xl font-bold text-white mb-2"></h3>
       <p id="detailsMode" class="text-sm text-gray-400 mb-4"></p>
       <div id="detailsText" class="text-gray-100 whitespace-pre-line mb-4"></div>
-      <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 underline font-semibold hover:text-blue-300 block mb-4">
-        Reglas del juego
-      </a>
-    </div>
+
+        <div class="mt-6 flex justify-between mb-4">
+          <a href="https://root.seiyria.com/" target="_blank" class="text-blue-400 underline font-semibold hover:text-blue-300">
+          Reglas del juego
+        </a>
+        <a href="#" class="text-blue-400 underline font-semibold hover:text-blue-300 cursor-pointer showQR-trigger">
+          QR
+        </a>
+        </div>
+          </div>
 
   </div>
 </div>
@@ -1057,6 +1070,7 @@ const closeDetails = document.getElementById("closeDetails");
 openBtn.addEventListener("click", () => {
   overlay.classList.remove("hidden");
   prepWindow.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
 });
 
 
@@ -1077,33 +1091,58 @@ const factionColors = {
 };
 
 
+// REEMPLAZA CON ESTE BLOQUE (VERSIÓN 5 - SIN ESPACIOS)
 Object.entries(prepData).forEach(([faction, data]) => {
-  const div = document.createElement("div");
-  const color = factionColors[faction] || "#444"; // color por defecto si falta alguno
-  div.className = "p-3 rounded-xl text-white shadow-md text-center";
-  div.style.backgroundColor = color;
+  const div = document.createElement("div");
+  const color = factionColors[faction] || "#444"; // color por defecto si falta alguno
+  div.className = "p-3 rounded-xl text-white shadow-md text-center";
+  div.style.backgroundColor = color;
 
-  // Ajuste de color del texto si el fondo es muy claro
-  if (["Marquesado", "Compañía del Río", "Culto Reptiliano", "Ducado Subterráneo", "Vagabundo (B)"].includes(faction)) {
-    div.style.color = "#222"; // texto oscuro para fondos claros
-  }
+  // Ajuste de color del texto si el fondo es muy claro
+  if (["Marquesado", "Compañía del Río", "Culto Reptiliano", "Ducado Subterráneo", "Vagabundo (B)"].includes(faction)) {
+    div.style.color = "#222"; // texto oscuro para fondos claros
+  }
 
-  div.innerHTML = `
-    <div class="text-lg font-semibold mb-2 text-center">${faction}</div>
-    <div class="flex justify-center gap-2">
-      <button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="normal">Normal</button>
-      <button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="avanzada">Avanzada</button>
-      
-    </div>
-  `;
-  prepList.appendChild(div);
+  // --- INICIO DEL CAMBIO ---
+  // 1. Crear un array para los botones
+  const buttons = [];
+  
+  if (data.normal) {
+    // 2. Añadir el botón "Normal" si existe
+    buttons.push(
+      `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="normal">Normal</button>`
+    );
+  }
+  
+  if (data.avanzada) {
+    // 3. Añadir el botón "Avanzada" si existe
+    buttons.push(
+      `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="avanzada">Avanzada</button>`
+    );
+  }
+  
+  // 4. Unir los botones con un solo espacio (la clase gap-2 se encarga del resto)
+  const buttonsHtml = buttons.join(' ');
+  // --- FIN DEL CAMBIO ---
+
+  // 5. CONSTRUIR EL HTML FINAL SIN SALTOS DE LÍNEA
+  // Usamos concatenación (+) en lugar de una plantilla (`) para
+  // asegurar que no haya ningún espacio en blanco (newline) extra.
+  div.innerHTML = 
+    `<div class="text-lg font-semibold mb-2 text-center">${faction}</div>` +
+    `<div class="flex justify-center gap-2">${buttonsHtml}</div>`;
+
+  
+  prepList.appendChild(div);
 
 });
+// FIN DEL BLOQUE DE REEMPLAZO
 
 // Cerrar lista
 closePrep.addEventListener("click", () => {
   overlay.classList.add("hidden");
   prepWindow.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
 });
 
 // Mostrar detalle
@@ -1134,7 +1173,9 @@ overlay.addEventListener("click", () => {
   overlay.classList.add("hidden");
   prepWindow.classList.add("hidden");
   details.classList.add("hidden");
+  document.body.classList.remove("no-scroll");
 });
+
 </script>
 <div id="qrModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
   <div class="relative bg-white p-4 rounded-lg shadow-lg">
@@ -1142,29 +1183,55 @@ overlay.addEventListener("click", () => {
     <button id="closeQR" class="absolute -top-4 -right-4 w-10 h-10 rounded-full bg-blue-800 text-white flex items-center justify-center text-2xl font-bold hover:bg-blue-700 transform hover:scale-110 hover:rotate-12 transition duration-200">
       &times;
     </button>
-    <!-- Imagen QR -->
-    <img src="./rootIcon/QR.png" alt="QR" class="w-64 h-64 mx-auto">
+    <div id="qr-placeholder" class="w-64 h-64 mx-auto flex justify-center items-center"></div>
   </div>
 </div>
 
-<!-- Script -->
+
 <script>
-  const qrLink = document.getElementById('showQR');
+    // CAMBIO: Seleccionamos por clase, no por ID
+  const qrTriggers = document.querySelectorAll('.showQR-trigger'); 
   const qrModal = document.getElementById('qrModal');
   const closeQR = document.getElementById('closeQR');
+  const qrPlaceholder = document.getElementById('qr-placeholder'); // El div que creamos
+  let qrCode = null; // Para no generarlo más de una vez
 
-  // Mostrar modal al hacer clic
-  qrLink.addEventListener('click', function(e) {
+  const linkParaElQR = "https://root.seiyria.com/"; 
+
+  // Función reutilizable para abrir el modal
+  function openQRModal(e) {
     e.preventDefault();
+    
+    // Generar el QR solo la primera vez que se abre
+    if (!qrCode) {
+      qrPlaceholder.innerHTML = ''; // Limpiamos el div por si acaso
+      qrCode = new QRCode(qrPlaceholder, {
+        text: linkParaElQR,
+        width: 256, // 256px (equivale a w-64 de Tailwind)
+        height: 256, // 256px (equivale a h-64 de Tailwind)
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+    }
+    
     qrModal.classList.remove('hidden');
     qrModal.classList.add('flex');
+    document.body.classList.add("no-scroll");
+  }
+
+  // CAMBIO: Aplicamos el evento a CADA botón encontrado
+  qrTriggers.forEach(trigger => {
+    trigger.addEventListener('click', openQRModal);
   });
+
+
 
   // Cerrar modal
   closeQR.addEventListener('click', function() {
     qrModal.classList.add('hidden');
     qrModal.classList.remove('flex');
-    
+    document.body.classList.remove("no-scroll");
   });
 
   // Opcional: cerrar si hace clic fuera del contenido
@@ -1172,12 +1239,15 @@ overlay.addEventListener("click", () => {
     if (e.target === qrModal) {
       qrModal.classList.add('hidden');
       qrModal.classList.remove('flex');
+      document.body.classList.remove("no-scroll");
     }
   });
 </script>
 
 </body>
 </html>
+
+
 
 
 
