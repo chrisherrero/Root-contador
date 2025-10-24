@@ -1,0 +1,274 @@
+
+:root{
+    --bg-madera: #2c1d10;
+    --panel: rgba(50, 35, 20, 0.92);
+    --acento: #dca45c;
+    --boton: #d28b45;
+    --boton-hover: #e59d52;
+    --texto-claro: #f9f5f0;
+}
+
+#prepList button {
+color: white !important;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    background: var(--bg-madera);
+    color:var(--texto-claro);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:1.2rem;
+}
+h1{ margin:0.5rem 0 1rem 0; 
+    font-size:clamp(1.4rem, 3.8vw, 2.1rem); 
+    
+    color: var(--acento); 
+    font-weight: 700; 
+    letter-spacing: 0.025em; 
+    text-shadow: 
+    1px 1px 1px rgba(0,0,0,0.7), 
+    0 0 6px var(--acento); 
+    }
+
+/* Contenedor principal */
+.contenedor {
+    width:100%;
+    max-width:1100px;
+}
+
+/* Pantallas */
+.pantalla { display:none; }
+.activa { display:block; }
+
+/* Panel configuracion */
+.configuracion {
+    background:var(--panel);
+    padding:1rem;
+    border-radius:12px;
+    box-shadow:0 0 12px rgba(0,0,0,0.7);
+}
+.fila { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; justify-content:space-between; }
+label{ font-weight:600; }
+select, input[type="number"], input[type="text"]{
+    padding:0.45rem 0.6rem;
+    border-radius:8px;
+    border:none;
+    font-size:1rem;
+    background:rgba(255,255,255,0.95);
+    color:#000;
+}
+#numJugadores {
+    background: rgba(255,255,255,0.95);
+    color: #000;
+    font-size: 1.1rem;
+    padding: 0.5rem 0.7rem;
+}
+.switch {
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+}
+
+button{
+    padding:0.6rem 1rem;
+    border-radius:10px;
+    border:none;
+    background:var(--boton-hover);
+    color:white;
+    cursor:pointer;
+    box-shadow:2px 2px 6px rgba(0,0,0,0.6);
+    transition:transform .12s ease, background .12s ease;
+}
+button:hover{ transform:scale(1.03); background:var(--boton-hover) }
+
+/* Botones específicos siempre naranja */
+#iniciarBtn,
+#volverBtn,
+#resetBtn {
+    background: var(--boton-hover) !important; /* siempre naranja */
+    color: black !important;
+    font-size: 1.2rem;       /* tamaño de texto más grande */
+    padding: 0.8rem 1.5rem;  /* más espacio interno */
+}
+
+#iniciarBtn:hover,
+#volverBtn:hover,
+#resetBtn:hover {
+    background: var(--boton-hover) !important; /* no cambia al pasar el mouse */
+    transform: scale(1.03); /* solo efecto de agrandar */
+}
+
+/* tablero selects - stacked 2 per row cuando espacio */
+.tablero {
+    margin-top:1rem;
+    display:grid;
+    gap:1rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    width:100%;
+}
+
+.jugador {
+    border-radius:14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.55), inset 0 -2px 0 rgba(0,0,0,0.15);
+    display:flex;
+    flex-direction:column;
+    gap:0.6rem;
+    align-items:center;
+    min-height:150px;
+    padding:0.8rem;
+    transition:transform .12s ease;
+}
+.jugador:hover{ transform: translateY(-3px); }
+
+.nombre-j {
+    width:100%;
+    text-align:center;
+    font-weight:700;
+    background: rgba(255,255,255,0.85);
+    color:#000;
+    padding:0.25rem;
+    border-radius:6px;
+    border:none;
+}
+
+.selector-row { display:flex; gap:0.6rem; width:100%; align-items:center; justify-content:center; }
+.selector-row select { max-width:220px; width:100%; }
+.alcance-valor { min-width:72px; text-align:center; padding:0.35rem 0.5rem; border-radius:8px; background:rgba(0,0,0,0.28); color:var(--texto-claro); font-weight:700; }
+
+.puntos {
+    font-size:clamp(1.6rem,3.8vw,2.2rem);
+    font-weight:900;
+    text-shadow:1px 1px 2px rgba(0,0,0,0.8);
+    color: #000;
+    background: rgba(255,255,255,0.85);
+    padding:0.3rem 0.8rem;
+    border-radius:8px;
+}
+
+.mensaje-err { margin-top:0.8rem; color:#ffb3b3; font-weight:700; text-align:center; min-height:1.3rem }
+.alcance-act { margin-top:0.6rem; text-align:center; color:#bfe9ff; font-weight:700 }
+
+#iniciarBtn { margin:1rem auto 0; display:block; }
+#iniciarBtn:disabled { background:#6b6b6b; cursor:not-allowed; transform:none }
+
+/* Pantalla juego */
+.juego-area { margin-top:1rem; display:flex; flex-direction:column; gap:1rem; align-items:center; }
+.tablero-juego {
+    display:grid;
+    gap:1rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    width:100%;
+}
+.jugador-juego {
+    border-radius:14px;
+    padding:0.8rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.6rem;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    min-height:150px;
+}
+.jugador-juego .nombre-juego {
+    width:100%;
+    text-align:center;
+    font-weight:700;
+    padding:0.35rem 0.25rem;
+    border-radius:6px;
+    border:none;
+    font-size: 1.25rem;
+}
+/* Botones y layout de score en la pantalla de juego */
+.botones {
+display:flex;
+align-items:center;
+justify-content:center;
+gap:0.6rem;
+}
+
+
+.botones button {
+background: transparent;
+border: none;
+padding: 0.2rem 0.5rem;
+font-size: 2.5rem;        
+font-weight: 900;
+line-height: 1;
+cursor: pointer;
+color: inherit;         /* para que el JS pueda setear color según contraste */
+touch-action: manipulation;
+}
+
+/* evitar el efecto de selección molesto en móviles */
+.botones button:active { transform: scale(0.95); }
+
+/* Puntos (ahora dentro del row) */
+.botones .puntos {
+min-width: 64px;
+text-align: center;
+font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+font-weight: 900;
+background: transparent; /* ahora transparente: el color viene del card */
+color: inherit;
+padding: 0.15rem 0.4rem;
+border-radius: 6px;
+}
+
+.ganador {
+position: fixed;
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%) scale(0);
+background: rgba(0, 0, 0, 0.85);
+color: #ffd700; /* dorado */
+padding: 1.5rem 2rem;
+border-radius: 16px;
+font-size: 1.5rem;
+font-weight: 900;
+text-align: center;
+display: none;
+box-shadow: 0 0 20px gold, 0 0 40px rgba(255, 215, 0, 0.4);
+z-index: 999;
+animation: popin 0.5s forwards;
+}
+
+.ganador.activo {
+display: block;
+}
+
+/* Animación pop-in */
+@keyframes popin {
+0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes pop {
+0% { transform: scale(1); }
+50% { transform: scale(1.4); color: var(--acento); } /* Crece y brilla */
+100% { transform: scale(1); }
+}
+
+.pop-anim {
+animation: pop 0.3s ease-out;
+}
+
+body.no-scroll {
+overflow: hidden;
+}
+
+
+.custom-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
