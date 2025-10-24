@@ -198,16 +198,17 @@
   gap:0.6rem;
 }
 
-/* Botones: sin fondo blanco, símbolos grandes, color heredado */
+
 .botones button {
   background: transparent;
   border: none;
   padding: 0.1rem 0.35rem;
-  font-size: 2rem;        /* más grandes */
+  font-size: 2rem;        
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
   color: inherit;         /* para que el JS pueda setear color según contraste */
+  touch-action: manipulation;
 }
 
 /* evitar el efecto de selección molesto en móviles */
@@ -252,6 +253,16 @@
   0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
   60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
   100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); color: var(--acento); } /* Crece y brilla */
+  100% { transform: scale(1); }
+}
+
+.pop-anim {
+  animation: pop 0.3s ease-out;
 }
 
 body.no-scroll {
@@ -690,6 +701,11 @@ div.appendChild(botones);
       let pts = parseInt(puntosDiv.textContent) || 0;
       pts++;
       puntosDiv.textContent = pts;
+
+      puntosDiv.classList.remove('pop-anim'); // Resetea por si se clickea rápido
+  void puntosDiv.offsetWidth; // Truco para forzar el reinicio de la anim
+  puntosDiv.classList.add('pop-anim'); // ¡Aplica la animación!
+
       chequearGanador();
       guardarEstadoJuego();
     });
