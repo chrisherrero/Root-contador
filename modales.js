@@ -24,7 +24,7 @@ const closeQR = document.getElementById('closeQR');
 const qrPlaceholder = document.getElementById('qr-placeholder'); // El div que creamos
 let qrCode = null; // Para no generarlo más de una vez
 
-const linkParaElQR = "https://root.seiyria.com/"; 
+const linkParaElQR = "https://chrisherrero.github.io/Root-contador/"; 
 
 // Función reutilizable para abrir el modal
 function openQRModal(e) {
@@ -154,4 +154,5 @@ prepWindow.classList.add("hidden");
 details.classList.add("hidden");
 document.body.classList.remove("no-scroll");
 });
+
 
