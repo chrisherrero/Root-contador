@@ -8,6 +8,9 @@ const detailsTitle = document.getElementById("detailsTitle");
 const detailsMode = document.getElementById("detailsMode");
 const detailsText = document.getElementById("detailsText");
 const closeDetails = document.getElementById("closeDetails");
+const openGuiaModalBtn = document.getElementById('openGuiaModal');
+const guiaModal = document.getElementById('guiaModal');
+const closeGuiaModalBtn = document.getElementById('closeGuiaModal');
 
 openBtn.addEventListener("click", () => {
 overlay.classList.remove("hidden");
@@ -17,14 +20,14 @@ document.body.classList.add("no-scroll");
 
 
 
-    // CAMBIO: Seleccionamos por clase, no por ID
+    
 const qrTriggers = document.querySelectorAll('.showQR-trigger'); 
 const qrModal = document.getElementById('qrModal');
 const closeQR = document.getElementById('closeQR');
-const qrPlaceholder = document.getElementById('qr-placeholder'); // El div que creamos
+const qrPlaceholder = document.getElementById('qr-placeholder');
 let qrCode = null; // Para no generarlo más de una vez
 
-const linkParaElQR = "https://chrisherrero.github.io/Root-contador/"; 
+const linkParaElQR = "https://root.seiyria.com/"; 
 
 // Función reutilizable para abrir el modal
 function openQRModal(e) {
@@ -32,11 +35,11 @@ function openQRModal(e) {
     
     // Generar el QR solo la primera vez que se abre
     if (!qrCode) {
-    qrPlaceholder.innerHTML = ''; // Limpiamos el div por si acaso
+    qrPlaceholder.innerHTML = '';
     qrCode = new QRCode(qrPlaceholder, {
         text: linkParaElQR,
-        width: 256, // 256px (equivale a w-64 de Tailwind)
-        height: 256, // 256px (equivale a h-64 de Tailwind)
+        width: 256,
+        height: 256, 
         colorDark : "#000000",
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
@@ -48,18 +51,35 @@ function openQRModal(e) {
     document.body.classList.add("no-scroll");
 }
 
-// CAMBIO: Aplicamos el evento a CADA botón encontrado
+
 qrTriggers.forEach(trigger => {
     trigger.addEventListener('click', openQRModal);
 });
 
+openGuiaModalBtn.addEventListener('click', () => {
+    guiaModal.classList.remove('hidden');
+    guiaModal.classList.add('flex');
+    guiaModal.querySelector('.custom-scroll').scrollTop = 0;
+    document.body.classList.add("no-scroll");
+});
 
 
-// Cerrar modal
+
+
 closeQR.addEventListener('click', function() {
     qrModal.classList.add('hidden');
     qrModal.classList.remove('flex');
     document.body.classList.remove("no-scroll");
+});
+
+
+closeGuiaModalBtn.addEventListener('click', () => {
+    guiaModal.classList.add('hidden');
+    guiaModal.classList.remove('flex');
+
+    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) { // Check both overlay and QR modal
+        document.body.classList.remove("no-scroll");
+    }
 });
 
 // Opcional: cerrar si hace clic fuera del contenido
@@ -77,36 +97,31 @@ const color = factionColors[faction] || "#444"; // color por defecto si falta al
 div.className = "p-3 rounded-xl text-white shadow-md text-center";
 div.style.backgroundColor = color;
 
-// Ajuste de color del texto si el fondo es muy claro
+
 if (["Marquesado", "Compañía del Río", "Culto Reptiliano", "Ducado Subterráneo", "Vagabundo (B)"].includes(faction)) {
-div.style.color = "#222"; // texto oscuro para fondos claros
+div.style.color = "#222"; 
 }
 
-// --- INICIO DEL CAMBIO ---
-// 1. Crear un array para los botones
+
 const buttons = [];
 
 if (data.normal) {
-    // 2. Añadir el botón "Normal" si existe
+
 buttons.push(
     `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="normal">Normal</button>`
     );
 }
 
 if (data.avanzada) {
-    // 3. Añadir el botón "Avanzada" si existe
+    
 buttons.push(
     `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="avanzada">Avanzada</button>`
     );
 }
 
-// 4. Unir los botones con un solo espacio (la clase gap-2 se encarga del resto)
-const buttonsHtml = buttons.join(' ');
-// --- FIN DEL CAMBIO ---
 
-// 5. CONSTRUIR EL HTML FINAL SIN SALTOS DE LÍNEA
-// Usamos concatenación (+) en lugar de una plantilla (`) para
-// asegurar que no haya ningún espacio en blanco (newline) extra.
+const buttonsHtml = buttons.join(' ');
+
 div.innerHTML = 
 `<div class="text-lg font-semibold mb-2 text-center">${faction}</div>` +
 `<div class="flex justify-center gap-2">${buttonsHtml}</div>`;
@@ -114,8 +129,15 @@ div.innerHTML =
 
 prepList.appendChild(div);
 
+if (faction === "Inicio de partida") {
+        const separator = document.createElement('div');
+
+        separator.className = 'h-[6px] w-11/12 mx-auto bg-gray-700 rounded-full my-1';
+        prepList.appendChild(separator);
+    }
+
 });
-// FIN DEL BLOQUE DE REEMPLAZO
+
 
 // Cerrar lista
 closePrep.addEventListener("click", () => {
@@ -148,11 +170,19 @@ prepWindow.classList.remove("hidden");
 });
 
 // Cerrar todo con overlay
-overlay.addEventListener("click", () => {
-overlay.classList.add("hidden");
-prepWindow.classList.add("hidden");
-details.classList.add("hidden");
-document.body.classList.remove("no-scroll");
+overlay.addEventListener("click", (e) => {
+
+    if (e.target === overlay) {
+        overlay.classList.add("hidden");
+        prepWindow.classList.add("hidden");
+        details.classList.add("hidden");
+
+        // También cerrar QR y Guía si estuvieran abiertos
+        qrModal.classList.add("hidden");
+        qrModal.classList.remove("flex");
+        guiaModal.classList.add("hidden");
+        guiaModal.classList.remove("flex");
+
+        document.body.classList.remove("no-scroll");
+    }
 });
-
-
