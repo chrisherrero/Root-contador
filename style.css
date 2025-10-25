@@ -7,6 +7,7 @@
     --boton: #607563;          
     --boton-hover: #D5E0D5;
     --texto-claro: #f9f5f0;
+    --card-bg: #2a4d30;
 }
 
 #prepList button {
@@ -120,6 +121,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
     min-height:150px;
     padding:0.8rem;
     transition:transform .12s ease;
+    background: var(--card-bg);
 }
 .jugador:hover{ transform: translateY(-3px); }
 
@@ -171,6 +173,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
     gap:0.6rem;
     box-shadow: 0 6px 16px rgba(0,0,0,0.6);
     min-height:150px;
+    background: var(--card-bg);
 }
 .jugador-juego .nombre-juego {
     width:100%;
@@ -271,5 +274,6 @@ overflow: hidden;
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
 
 
