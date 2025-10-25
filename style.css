@@ -1,10 +1,11 @@
 
 :root{
-    --bg-madera: #2f2b28;
-    --panel: rgba(50, 35, 20, 0.92);
-    --acento: #dca45c;
-    --boton: #d28b45;
-    --boton-hover: #e59d52;
+    --bg-verde-oscuro: #101c12; 
+    --bg-verde-medio: #1a2d1f;
+    --panel: rgba(28, 66, 30, 0.92);
+    --acento: #B5C5B5;          
+    --boton: #607563;          
+    --boton-hover: #D5E0D5;
     --texto-claro: #f9f5f0;
 }
 
@@ -16,7 +17,7 @@ body{
     margin:0;
     min-height:100vh;
     font-family: "Trebuchet MS", Arial, sans-serif;
-    background: linear-gradient(to bottom, #2c1d10, #1a110a);
+    background: linear-gradient(to bottom, var(--bg-verde-medio), var(--bg-verde-oscuro));
     color:var(--texto-claro);
     display:flex;
     flex-direction:column;
@@ -24,14 +25,12 @@ body{
     padding:1.2rem;
 }
 h1{ margin:0.5rem 0 1rem 0; 
-    font-size:clamp(1.4rem, 3.8vw, 2.1rem); 
+    font-size:clamp(1.6rem, 4vw, 2.5rem); 
     
     color: var(--acento); 
     font-weight: 700; 
     letter-spacing: 0.025em; 
-    text-shadow: 
-    1px 1px 1px rgba(0,0,0,0.7), 
-    0 0 6px var(--acento); 
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.75);
     }
 
 /* Contenedor principal */
@@ -137,7 +136,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
 
 .selector-row { display:flex; gap:0.6rem; width:100%; align-items:center; justify-content:center; }
 .selector-row select { max-width:220px; width:100%; }
-.alcance-valor { min-width:72px; text-align:center; padding:0.35rem 0.5rem; border-radius:8px; background:rgba(0,0,0,0.28); color:var(--texto-claro); font-weight:700; }
+.alcance-valor { min-width:72px; text-align:center; padding:0.35rem 0.5rem; border-radius:8px; background:rgba(0,0,0,0.28); color: var(--acento); font-weight:700; }
 
 .puntos {
     font-size:clamp(1.6rem,3.8vw,2.2rem);
@@ -150,7 +149,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
 }
 
 .mensaje-err { margin-top:0.8rem; color:#ffb3b3; font-weight:700; text-align:center; min-height:1.3rem }
-.alcance-act { margin-top:0.6rem; text-align:center; color:#bfe9ff; font-weight:700 }
+.alcance-act { margin-top:0.6rem; text-align:center; color: var(--acento); font-weight:700 }
 
 #iniciarBtn { margin:1rem auto 0; display:block; }
 #iniciarBtn:disabled { background:#6b6b6b; cursor:not-allowed; transform:none }
@@ -272,4 +271,5 @@ overflow: hidden;
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
 
