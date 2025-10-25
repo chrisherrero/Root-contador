@@ -27,7 +27,7 @@ const closeQR = document.getElementById('closeQR');
 const qrPlaceholder = document.getElementById('qr-placeholder');
 let qrCode = null; // Para no generarlo más de una vez
 
-const linkParaElQR = "https://root.seiyria.com/"; 
+const linkParaElQR = "https://chrisherrero.github.io/Root-contador/";
 
 // Función reutilizable para abrir el modal
 function openQRModal(e) {
@@ -186,3 +186,4 @@ overlay.addEventListener("click", (e) => {
         document.body.classList.remove("no-scroll");
     }
 });
+
