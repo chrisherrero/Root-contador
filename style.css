@@ -1,6 +1,6 @@
 
 :root{
-    --bg-madera: #2c1d10;
+    --bg-madera: #2f2b28;
     --panel: rgba(50, 35, 20, 0.92);
     --acento: #dca45c;
     --boton: #d28b45;
@@ -16,7 +16,7 @@ body{
     margin:0;
     min-height:100vh;
     font-family: "Trebuchet MS", Arial, sans-serif;
-    background: var(--bg-madera);
+    background: linear-gradient(to bottom, #2c1d10, #1a110a);
     color:var(--texto-claro);
     display:flex;
     flex-direction:column;
@@ -272,3 +272,4 @@ overflow: hidden;
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
