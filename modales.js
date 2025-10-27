@@ -29,7 +29,8 @@ const closeQR = document.getElementById('closeQR');
 const qrPlaceholder = document.getElementById('qr-placeholder');
 let qrCode = null; 
 
-const linkParaElQR = "https://chrisherrero.github.io/Root-contador/";
+
+const linkParaElQR = "https://chrisherrero.github.io/Root-contador/"; // <--- AQUI SE CAMBIA EL LINK PARA EL QR AUTOGENERADO
 
 
 function openQRModal(e) {
@@ -231,6 +232,7 @@ overlay.addEventListener("click", (e) => {
         document.body.classList.remove("no-scroll");
     }
 });
+
 
 
 
