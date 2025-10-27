@@ -8,6 +8,8 @@ const detailsTitle = document.getElementById("detailsTitle");
 const detailsMode = document.getElementById("detailsMode");
 const detailsText = document.getElementById("detailsText");
 const closeDetails = document.getElementById("closeDetails");
+const summaryToggleContainer = document.getElementById("summaryToggleContainer");
+const toggleSummaryBtn = document.getElementById("toggleSummaryBtn");
 const openGuiaModalBtn = document.getElementById('openGuiaModal');
 const guiaModal = document.getElementById('guiaModal');
 const closeGuiaModalBtn = document.getElementById('closeGuiaModal');
@@ -146,30 +148,73 @@ prepWindow.classList.add("hidden");
 document.body.classList.remove("no-scroll");
 });
 
-// Mostrar detalle
+
 prepList.addEventListener("click", (e) => {
-const btn = e.target.closest("button[data-faction]");
-if (!btn) return;
+    const btn = e.target.closest("button[data-faction]");
+    if (!btn) return;
 
-const faction = btn.dataset.faction;
-const mode = btn.dataset.mode;
-const text = prepData[faction][mode];
+    const faction = btn.dataset.faction;
+    const mode = btn.dataset.mode;
+    
+ 
+    const prepText = prepData[faction][mode];
+    const prepModeText = mode === "normal" ? "Preparación Básica" : "Preparación Avanzada";
+ 
+    const summaryText = (typeof factionSummaries !== 'undefined') ? factionSummaries[faction] : null;
 
-detailsTitle.textContent = faction;
-detailsMode.textContent = mode === "normal" ? "Preparación Básica" : "Preparación Avanzada";
-detailsText.textContent = text;
+ 
+    detailsTitle.textContent = faction;
+    detailsMode.textContent = prepModeText;
+    detailsText.textContent = prepText;
 
-prepWindow.classList.add("hidden");
-details.classList.remove("hidden");
+
+    if (summaryText) {
+
+        details.dataset.prepText = prepText;
+        details.dataset.prepMode = prepModeText;
+        details.dataset.summaryText = summaryText;
+        details.dataset.summaryMode = "Resumen de Facción";
+        
+
+        toggleSummaryBtn.textContent = "Ver Resumen";
+        details.dataset.showing = "prep"; 
+
+
+        summaryToggleContainer.classList.remove("hidden");
+    } else {
+
+        summaryToggleContainer.classList.add("hidden");
+    }
+
+
+    prepWindow.classList.add("hidden");
+    details.classList.remove("hidden");
 });
 
-// Cerrar detalle
+toggleSummaryBtn.addEventListener("click", () => {
+    const currentState = details.dataset.showing;
+
+    if (currentState === "prep") {
+        // CAMBIAR A MODO RESUMEN
+        detailsText.textContent = details.dataset.summaryText;
+        detailsMode.textContent = details.dataset.summaryMode;
+        toggleSummaryBtn.textContent = "Ver Preparación"; // Cambiar texto del botón
+        details.dataset.showing = "summary";
+    } else {
+        // CAMBIAR DE VUELTA A MODO PREPARACIÓN
+        detailsText.textContent = details.dataset.prepText;
+        detailsMode.textContent = details.dataset.prepMode;
+        toggleSummaryBtn.textContent = "Ver Resumen"; // Cambiar texto del botón
+        details.dataset.showing = "prep";
+    }
+});
+
 closeDetails.addEventListener("click", () => {
 details.classList.add("hidden");
 prepWindow.classList.remove("hidden");
 });
 
-// Cerrar todo con overlay
+
 overlay.addEventListener("click", (e) => {
 
     if (e.target === overlay) {
@@ -177,7 +222,7 @@ overlay.addEventListener("click", (e) => {
         prepWindow.classList.add("hidden");
         details.classList.add("hidden");
 
-        // También cerrar QR y Guía si estuvieran abiertos
+    
         qrModal.classList.add("hidden");
         qrModal.classList.remove("flex");
         guiaModal.classList.add("hidden");
@@ -186,4 +231,5 @@ overlay.addEventListener("click", (e) => {
         document.body.classList.remove("no-scroll");
     }
 });
+
 
