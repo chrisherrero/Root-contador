@@ -34,17 +34,17 @@ h1{ margin:0.5rem 0 1rem 0;
     text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.75);
     }
 
-/* Contenedor principal */
+
 .contenedor {
     width:100%;
     max-width:1100px;
 }
 
-/* Pantallas */
+
 .pantalla { display:none; }
 .activa { display:block; }
 
-/* Panel configuracion */
+
 .configuracion {
     background:var(--panel);
     padding:1rem;
@@ -85,24 +85,24 @@ button{
 }
 button:hover{ transform:scale(1.03); background:var(--boton-hover) }
 
-/* Botones específicos siempre naranja */
+
 #iniciarBtn,
 #volverBtn,
 #resetBtn {
-    background: var(--boton-hover) !important; /* siempre naranja */
+    background: var(--boton-hover) !important;
     color: black !important;
-    font-size: 1.2rem;       /* tamaño de texto más grande */
-    padding: 0.8rem 1.5rem;  /* más espacio interno */
+    font-size: 1.2rem;       
+    padding: 0.8rem 1.5rem; 
 }
 
 #iniciarBtn:hover,
 #volverBtn:hover,
 #resetBtn:hover {
-    background: var(--boton-hover) !important; /* no cambia al pasar el mouse */
-    transform: scale(1.03); /* solo efecto de agrandar */
+    background: var(--boton-hover) !important; 
+    transform: scale(1.03); 
 }
 
-/* tablero selects - stacked 2 per row cuando espacio */
+
 .tablero {
     margin-top:1rem;
     display:grid;
@@ -156,7 +156,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
 #iniciarBtn { margin:1rem auto 0; display:block; }
 #iniciarBtn:disabled { background:#6b6b6b; cursor:not-allowed; transform:none }
 
-/* Pantalla juego */
+
 .juego-area { margin-top:1rem; display:flex; flex-direction:column; gap:1rem; align-items:center; }
 .tablero-juego {
     display:grid;
@@ -184,7 +184,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
     border:none;
     font-size: 1.25rem;
 }
-/* Botones y layout de score en la pantalla de juego */
+
 .botones {
 display:flex;
 align-items:center;
@@ -201,20 +201,20 @@ font-size: 2.5rem;
 font-weight: 900;
 line-height: 1;
 cursor: pointer;
-color: inherit;         /* para que el JS pueda setear color según contraste */
+color: inherit;        
 touch-action: manipulation;
 }
 
-/* evitar el efecto de selección molesto en móviles */
+
 .botones button:active { transform: scale(0.95); }
 
-/* Puntos (ahora dentro del row) */
+
 .botones .puntos {
 min-width: 64px;
 text-align: center;
 font-size: clamp(1.9rem, 4.5vw, 2.8rem);
 font-weight: 900;
-background: transparent; /* ahora transparente: el color viene del card */
+background: transparent;
 color: inherit;
 padding: 0.15rem 0.4rem;
 border-radius: 6px;
@@ -226,7 +226,7 @@ left: 50%;
 top: 50%;
 transform: translate(-50%, -50%) scale(0);
 background: rgba(0, 0, 0, 0.85);
-color: #ffd700; /* dorado */
+color: #ffd700; 
 padding: 1.5rem 2rem;
 border-radius: 16px;
 font-size: 1.5rem;
@@ -242,7 +242,7 @@ animation: popin 0.5s forwards;
 display: block;
 }
 
-/* Animación pop-in */
+
 @keyframes popin {
 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
@@ -251,7 +251,7 @@ display: block;
 
 @keyframes pop {
 0% { transform: scale(1); }
-50% { transform: scale(1.4); color: var(--acento); } /* Crece y brilla */
+50% { transform: scale(1.4); color: var(--acento); } 
 100% { transform: scale(1); }
 }
 
@@ -274,6 +274,7 @@ overflow: hidden;
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
 
 
 
