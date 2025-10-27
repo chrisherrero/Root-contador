@@ -27,15 +27,15 @@ const qrTriggers = document.querySelectorAll('.showQR-trigger');
 const qrModal = document.getElementById('qrModal');
 const closeQR = document.getElementById('closeQR');
 const qrPlaceholder = document.getElementById('qr-placeholder');
-let qrCode = null; // Para no generarlo más de una vez
+let qrCode = null; 
 
 const linkParaElQR = "https://chrisherrero.github.io/Root-contador/";
 
-// Función reutilizable para abrir el modal
+
 function openQRModal(e) {
     e.preventDefault();
     
-    // Generar el QR solo la primera vez que se abre
+
     if (!qrCode) {
     qrPlaceholder.innerHTML = '';
     qrCode = new QRCode(qrPlaceholder, {
@@ -84,7 +84,7 @@ closeGuiaModalBtn.addEventListener('click', () => {
     }
 });
 
-// Opcional: cerrar si hace clic fuera del contenido
+
 qrModal.addEventListener('click', function(e) {
     if (e.target === qrModal) {
     qrModal.classList.add('hidden');
@@ -95,7 +95,7 @@ qrModal.addEventListener('click', function(e) {
 
 
 Object.entries(prepData).forEach(([faction, data]) => { const div = document.createElement("div");
-const color = factionColors[faction] || "#444"; // color por defecto si falta alguno
+const color = factionColors[faction] || "#444"; 
 div.className = "p-3 rounded-xl text-white shadow-md text-center";
 div.style.backgroundColor = color;
 
@@ -141,7 +141,7 @@ if (faction === "Inicio de partida") {
 });
 
 
-// Cerrar lista
+
 closePrep.addEventListener("click", () => {
 overlay.classList.add("hidden");
 prepWindow.classList.add("hidden");
@@ -195,13 +195,13 @@ toggleSummaryBtn.addEventListener("click", () => {
     const currentState = details.dataset.showing;
 
     if (currentState === "prep") {
-        // CAMBIAR A MODO RESUMEN
+
         detailsText.textContent = details.dataset.summaryText;
         detailsMode.textContent = details.dataset.summaryMode;
         toggleSummaryBtn.textContent = "Ver Preparación"; // Cambiar texto del botón
         details.dataset.showing = "summary";
     } else {
-        // CAMBIAR DE VUELTA A MODO PREPARACIÓN
+  
         detailsText.textContent = details.dataset.prepText;
         detailsMode.textContent = details.dataset.prepMode;
         toggleSummaryBtn.textContent = "Ver Resumen"; // Cambiar texto del botón
@@ -231,5 +231,6 @@ overlay.addEventListener("click", (e) => {
         document.body.classList.remove("no-scroll");
     }
 });
+
 
 
