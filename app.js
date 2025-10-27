@@ -178,6 +178,9 @@ selects.forEach((sel, idx) => {
     sel.style.background = esColorOscuro(f.color) ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.95)';
     puntosDiv.style.color = esColorOscuro(f.color) ? '#fff' : '#000';
     puntosDiv.style.background = esColorOscuro(f.color) ? 'rgba(0,0,0,0.26)' : 'rgba(255,255,255,0.85)';
+    const alcanceDiv = card.querySelector('.alcance-valor');
+    alcanceDiv.style.color = esColorOscuro(f.color) ? '#fff' : '#000';
+    alcanceDiv.style.background = esColorOscuro(f.color) ? 'rgba(0,0,0,0.26)' : 'rgba(255,255,255,0.85)';
     } else {
 
     card.style.background = 'linear-gradient(135deg,#444,#222)';
@@ -440,6 +443,7 @@ if(estado){
     }
 }
 });
+
 
 
 
