@@ -53,9 +53,13 @@
                     </div>
                 </div>
                 <div id="tablero" class="tablero"></div>
-                <div id="alcanceActual" class="alcance-act">Alcance actual: 0</div>
-                <div id="mensajeError" class="mensaje-err"></div>
-                <button id="iniciarBtn" disabled>Comenzar partida</button>
+                <div class="flex items-center justify-center gap-2 mt-2"> <div id="alcanceActual" class="alcance-act" style="margin-top:0;">Alcance actual: 0</div>
+                    <button id="alcanceHelpBtn" type="button" class="text-lg font-bold text-gray-400 hover:text-white transition rounded-full w-6 h-6 flex items-center justify-center" style="background: rgba(0,0,0,0.2); line-height: 1;">
+                        ?
+                    </button>
+                </div>
+                                <div id="mensajeError" class="mensaje-err"></div>
+                <button id="iniciarBtn" disabled>Comenzar partida</button>
             </div>
         </div>
 
@@ -150,6 +154,7 @@
     
     </body>
 </html>
+
 
 
 
