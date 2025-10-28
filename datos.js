@@ -208,3 +208,23 @@ const factionSummaries = {
     "Guardianes de Hierro": "Los Guardianes de Hierro son una orden de devotos caballeros, que tiempo atrás fueron exiliados del Bosque, pero han regresado para recuperar las reliquias perdidas en conflictos del pasado. No obstante, que estas reliquias pertenezcan a los Guardianes o al Bosque, ya es otra cuestión. Para cumplir su misión, necesitarán desenterrar las reliquias de los bosques, llevarlas a un puesto provisional del mismo tipo, y, finalmente, recuperarlas. Cuando recuperen una reliquia, obtienen tantos puntos de victoria como el valor de la misma, de uno a tres, y además también obtienen dos puntos cada vez que completan un conjunto de tres tipos de reliquias (figuras, tablas y joyas). Con el paso del tiempo, los Guardianes reunirán un Séquito de criaturas del Bosque, permitiéndoles realizar más acciones. Sin embargo, cada vez que desentierren o recuperen una reliquia, podrían perder la carta del Séquito que usaron para ello, por lo que necesitarán planear por adelantado y adoptar una gestión prudente del riesgo para tener éxito."
 };
 
+const alcanceHelpText = `
+El "Alcance" es un valor que mide qué tan "militante" o expansiva es una facción.
+
+• **Valores Altos (ej. Marquesado: 10):** Indican facciones que ponen muchos guerreros en el mapa.
+• **Valores Bajos (ej. Alianza: 3):** Indican facciones insurgentes o especializadas.
+
+Para una partida equilibrada, la suma del Alcance de todas las facciones debe ser igual o mayor al mínimo recomendado para tu número de jugadores:
+
+• 2 Jugadores: 17+
+• 3 Jugadores: 18+
+• 4 Jugadores: 21+
+• 5 Jugadores: 25+
+• 6 Jugadores: 28+
+
+**Regla Especial (Vagabundo):**
+
+• El primer Vagabundo (B o N) tiene un Alcance de 5.
+• Si se añade un segundo Vagabundo, este solo tiene un Alcance de 2.
+`;
+
