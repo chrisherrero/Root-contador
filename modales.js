@@ -10,6 +10,7 @@ const detailsText = document.getElementById("detailsText");
 const closeDetails = document.getElementById("closeDetails");
 const summaryToggleContainer = document.getElementById("summaryToggleContainer");
 const toggleSummaryBtn = document.getElementById("toggleSummaryBtn");
+const alcanceHelpBtn = document.getElementById('alcanceHelpBtn');
 const openGuiaModalBtn = document.getElementById('openGuiaModal');
 const guiaModal = document.getElementById('guiaModal');
 const closeGuiaModalBtn = document.getElementById('closeGuiaModal');
@@ -20,7 +21,22 @@ prepWindow.classList.remove("hidden");
 document.body.classList.add("no-scroll");
 });
 
+alcanceHelpBtn.addEventListener("click", () => {
 
+    detailsTitle.textContent = "Explicación de 'Alcance' (Reach)";
+    detailsMode.textContent = "Regla de Equilibrio de Partida";
+    detailsText.textContent = alcanceHelpText;
+
+
+    summaryToggleContainer.classList.add("hidden");
+
+
+    details.dataset.openedFrom = 'config'; 
+
+    overlay.classList.remove("hidden");
+    details.classList.remove("hidden");
+    document.body.classList.add("no-scroll");
+});
 
     
 const qrTriggers = document.querySelectorAll('.showQR-trigger'); 
@@ -31,6 +47,25 @@ let qrCode = null;
 
 
 const linkParaElQR = "https://chrisherrero.github.io/Root-contador/"; // <--- AQUI SE CAMBIA EL LINK PARA EL QR AUTOGENERADO
+
+function closeAllModals() {
+    overlay.classList.add("hidden");
+    prepWindow.classList.add("hidden");
+    details.classList.add("hidden");
+    qrModal.classList.add("hidden");
+    qrModal.classList.remove("flex");
+    guiaModal.classList.add("hidden");
+    guiaModal.classList.remove("flex");
+    document.body.classList.remove("no-scroll");
+}
+
+function closeSubModal(modalToClose) {
+    modalToClose.classList.add('hidden');
+    modalToClose.classList.remove('flex');
+    if (overlay.classList.contains('hidden') && qrModal.classList.contains('hidden') && guiaModal.classList.contains('hidden')) {
+        document.body.classList.remove("no-scroll");
+    }
+}
 
 
 function openQRModal(e) {
@@ -187,7 +222,8 @@ prepList.addEventListener("click", (e) => {
         summaryToggleContainer.classList.add("hidden");
     }
 
-
+    details.dataset.openedFrom = 'prep';
+    
     prepWindow.classList.add("hidden");
     details.classList.remove("hidden");
 });
@@ -211,27 +247,23 @@ toggleSummaryBtn.addEventListener("click", () => {
 });
 
 closeDetails.addEventListener("click", () => {
-details.classList.add("hidden");
-prepWindow.classList.remove("hidden");
+    if (details.dataset.openedFrom === 'prep') {
+
+        details.classList.add("hidden");
+        prepWindow.classList.remove("hidden");
+    } else {
+
+        closeAllModals(); 
+    }
 });
 
 
 overlay.addEventListener("click", (e) => {
-
-    if (e.target === overlay) {
-        overlay.classList.add("hidden");
-        prepWindow.classList.add("hidden");
-        details.classList.add("hidden");
-
-    
-        qrModal.classList.add("hidden");
-        qrModal.classList.remove("flex");
-        guiaModal.classList.add("hidden");
-        guiaModal.classList.remove("flex");
-
-        document.body.classList.remove("no-scroll");
-    }
+    if (e.target === overlay) {
+        closeAllModals(); // Debe llamar a la función que cierra todo
+    }
 });
+
 
 
 
