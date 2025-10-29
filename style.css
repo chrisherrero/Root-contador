@@ -3,50 +3,49 @@
     --bg-verde-oscuro: #101c12; 
     --bg-verde-medio: #1a2d1f;
     --panel: rgba(29, 63, 30, 0.96);
-    --acento: #B5C5B5;          
-    --boton: #607563;          
+   --acento: #B5C5B5;          /* Para títulos (Un plata/gris-verdoso pálido) */
+    --boton: #607563;          /* Botones (Gris musgo) */
     --boton-hover: #D5E0D5;
     --texto-claro: #f9f5f0;
-    --card-bg: #2a4d30;
 }
 
 #prepList button {
 color: white !important;
 }
 *{box-sizing:border-box}
-
 body{
-    margin:0;
-    min-height:100vh;
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    background: linear-gradient(to bottom, var(--bg-verde-medio), var(--bg-verde-oscuro));
-    color:var(--texto-claro);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:1.2rem;
+    margin:0;
+    min-height:100vh;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    background: linear-gradient(to bottom, var(--bg-verde-medio), var(--bg-verde-oscuro));
+    color:var(--texto-claro);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:1.2rem;
 }
-
 h1{ margin:0.5rem 0 1rem 0; 
-    font-size:clamp(1.6rem, 4vw, 2.5rem); 
+    font-size:clamp(1.4rem, 3.8vw, 2.1rem); 
     
     color: var(--acento); 
     font-weight: 700; 
     letter-spacing: 0.025em; 
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.75);
+    text-shadow: 
+    1px 1px 1px rgba(0,0,0,0.7), 
+    0 0 6px var(--acento); 
     }
 
-
+/* Contenedor principal */
 .contenedor {
     width:100%;
     max-width:1100px;
 }
 
-
+/* Pantallas */
 .pantalla { display:none; }
 .activa { display:block; }
 
-
+/* Panel configuracion */
 .configuracion {
     background:var(--panel);
     padding:1rem;
@@ -79,7 +78,7 @@ button{
     padding:0.6rem 1rem;
     border-radius:10px;
     border:none;
-    background:var(--boton);
+    background:var(--boton-hover);
     color:white;
     cursor:pointer;
     box-shadow:2px 2px 6px rgba(0,0,0,0.6);
@@ -87,24 +86,24 @@ button{
 }
 button:hover{ transform:scale(1.03); background:var(--boton-hover) }
 
-
+/* Botones específicos siempre naranja */
 #iniciarBtn,
 #volverBtn,
 #resetBtn {
-    background: var(--boton-hover) !important;
+    background: var(--boton-hover) !important; /* siempre naranja */
     color: black !important;
-    font-size: 1.2rem;       
-    padding: 0.8rem 1.5rem; 
+    font-size: 1.2rem;       /* tamaño de texto más grande */
+    padding: 0.8rem 1.5rem;  /* más espacio interno */
 }
 
 #iniciarBtn:hover,
 #volverBtn:hover,
 #resetBtn:hover {
-    background: var(--boton-hover) !important; 
-    transform: scale(1.03); 
+    background: var(--boton-hover) !important; /* no cambia al pasar el mouse */
+    transform: scale(1.03); /* solo efecto de agrandar */
 }
 
-
+/* tablero selects - stacked 2 per row cuando espacio */
 .tablero {
     margin-top:1rem;
     display:grid;
@@ -123,7 +122,6 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
     min-height:150px;
     padding:0.8rem;
     transition:transform .12s ease;
-    background: var(--card-bg);
 }
 .jugador:hover{ transform: translateY(-3px); }
 
@@ -140,7 +138,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
 
 .selector-row { display:flex; gap:0.6rem; width:100%; align-items:center; justify-content:center; }
 .selector-row select { max-width:220px; width:100%; }
-.alcance-valor { min-width:72px; text-align:center; padding:0.35rem 0.5rem; border-radius:8px; background:rgba(0,0,0,0.28); color: var(--acento); font-weight:700; }
+.alcance-valor { min-width:72px; text-align:center; padding:0.35rem 0.5rem; border-radius:8px; background:rgba(0,0,0,0.28); color:var(--texto-claro); font-weight:700; }
 
 .puntos {
     font-size:clamp(1.6rem,3.8vw,2.2rem);
@@ -153,12 +151,12 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
 }
 
 .mensaje-err { margin-top:0.8rem; color:#ffb3b3; font-weight:700; text-align:center; min-height:1.3rem }
-.alcance-act { margin-top:0.6rem; text-align:center; color: var(--acento); font-weight:700 }
+.alcance-act { margin-top:0.6rem; text-align:center; color:#bfe9ff; font-weight:700 }
 
 #iniciarBtn { margin:1rem auto 0; display:block; }
 #iniciarBtn:disabled { background:#6b6b6b; cursor:not-allowed; transform:none }
 
-
+/* Pantalla juego */
 .juego-area { margin-top:1rem; display:flex; flex-direction:column; gap:1rem; align-items:center; }
 .tablero-juego {
     display:grid;
@@ -175,7 +173,6 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
     gap:0.6rem;
     box-shadow: 0 6px 16px rgba(0,0,0,0.6);
     min-height:150px;
-    background: var(--card-bg);
 }
 .jugador-juego .nombre-juego {
     width:100%;
@@ -186,7 +183,7 @@ button:hover{ transform:scale(1.03); background:var(--boton-hover) }
     border:none;
     font-size: 1.25rem;
 }
-
+/* Botones y layout de score en la pantalla de juego */
 .botones {
 display:flex;
 align-items:center;
@@ -203,20 +200,20 @@ font-size: 2.5rem;
 font-weight: 900;
 line-height: 1;
 cursor: pointer;
-color: inherit;        
+color: inherit;         /* para que el JS pueda setear color según contraste */
 touch-action: manipulation;
 }
 
-
+/* evitar el efecto de selección molesto en móviles */
 .botones button:active { transform: scale(0.95); }
 
-
+/* Puntos (ahora dentro del row) */
 .botones .puntos {
 min-width: 64px;
 text-align: center;
 font-size: clamp(1.9rem, 4.5vw, 2.8rem);
 font-weight: 900;
-background: transparent;
+background: transparent; /* ahora transparente: el color viene del card */
 color: inherit;
 padding: 0.15rem 0.4rem;
 border-radius: 6px;
@@ -228,7 +225,7 @@ left: 50%;
 top: 50%;
 transform: translate(-50%, -50%) scale(0);
 background: rgba(0, 0, 0, 0.85);
-color: #ffd700; 
+color: #ffd700; /* dorado */
 padding: 1.5rem 2rem;
 border-radius: 16px;
 font-size: 1.5rem;
@@ -244,7 +241,7 @@ animation: popin 0.5s forwards;
 display: block;
 }
 
-
+/* Animación pop-in */
 @keyframes popin {
 0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 60% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
@@ -253,7 +250,7 @@ display: block;
 
 @keyframes pop {
 0% { transform: scale(1); }
-50% { transform: scale(1.4); color: var(--acento); } 
+50% { transform: scale(1.4); color: var(--acento); } /* Crece y brilla */
 100% { transform: scale(1); }
 }
 
@@ -276,9 +273,6 @@ overflow: hidden;
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
-
-
-
 
 
 
