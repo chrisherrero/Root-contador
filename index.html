@@ -2,20 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="utf-8" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Contador de Root - Completo</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-      tailwind.config = {
-        corePlugins: {
-          preflight: false, // Esto desactiva el reseteo de fondo blanco
-        }
-      }
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <link rel="icon" type="image/png" href="rootIcon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="rootIcon/favicon.svg" />
@@ -23,9 +16,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="rootIcon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="MyWebSite" />
     <link rel="manifest" href="rootIcon/site.webmanifest" />
-
-    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="contenedor">
 
@@ -43,7 +35,7 @@
                             <option value="6">6</option>
                         </select>
                         <span style="margin-left:0.6rem;">Alcance mínimo:</span>
-                        <div id="alcanceMin" class="alcance-valor" style="background:rgba(0,0,0,0.28); color:#B5C5B5;">21</div>
+                        <div id="alcanceMin" class="alcance-valor" style="background:rgba(0,0,0,0.28); color:#ffd86b;">21</div>
                     </div>
                     <div style="display:flex;gap:0.6rem;align-items:center">
                         <label for="maxPuntos" style="margin-right:0.3rem;">Puntaje máximo</label>
@@ -61,13 +53,14 @@
                     </div>
                 </div>
                 <div id="tablero" class="tablero"></div>
+
                 <div class="flex items-center justify-center gap-2 mt-2"> <div id="alcanceActual" class="alcance-act" style="margin-top:0;">Alcance actual: 0</div>
                     <button id="alcanceHelpBtn" type="button" class="text-lg font-bold text-gray-400 hover:text-white transition rounded-full w-6 h-6 flex items-center justify-center" style="background: rgba(0,0,0,0.2); line-height: 1;">
                         ?
                     </button>
                 </div>
-                                <div id="mensajeError" class="mensaje-err"></div>
-                <button id="iniciarBtn" disabled>Comenzar partida</button>
+                                    <div id="mensajeError" class="mensaje-err"></div>
+                <button id="iniciarBtn" disabled>Comenzar partida</button>
             </div>
         </div>
 
@@ -89,9 +82,9 @@
     </div>
 
     <button id="openPreparations" class="fixed top-4 right-4 bg-gray-700 text-white w-10 h-10 rounded-lg shadow-md hover:bg-gray-600 transition flex items-center justify-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
     </button>
 
     <div id="prepOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-40"></div>
@@ -125,6 +118,7 @@
             <div class="p-6 overflow-y-auto custom-scroll flex-1">
                 <h3 id="detailsTitle" class="text-xl font-bold text-white mb-2"></h3>
                 <p id="detailsMode" class="text-sm text-gray-400 mb-4"></p>
+
                 <div id="summaryToggleContainer" class="mb-4 hidden">
                     <button id="toggleSummaryBtn" class_exists="" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded-lg transition-colors text-base font-normal">
                         Ver Resumen
@@ -159,7 +153,7 @@
     <script src="datos.js"></script>    
     <script src="app.js"></script>      
     <script src="modales.js"></script>  
-    
+
     </body>
 </html>
 
