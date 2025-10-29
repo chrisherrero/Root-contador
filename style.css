@@ -1,4 +1,6 @@
-
+html {
+    background-color: var(--bg-verde-oscuro);
+}
 :root{
     --bg-verde-oscuro: #101c12; 
     --bg-verde-medio: #1a2d1f;
@@ -273,6 +275,7 @@ overflow: hidden;
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
 
 
 
