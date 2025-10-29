@@ -16,24 +16,20 @@ color: white !important;
 *{box-sizing:border-box}
 
 html {
-    /* Mover todos los estilos de fondo y fuente al HTML */
-    min-height: 100vh; /* Para que siempre cubra toda la altura */
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    background: linear-gradient(to bottom, var(--bg-verde-medio), var(--bg-verde-oscuro));
-    color: var(--texto-claro);
-    
-    /* Importante: evita que el degradado se repita en pantallas muy altas */
-    background-repeat: no-repeat;
+
+    background-color: var(--bg-verde-oscuro);
 }
 
 body{
-    /* Dejar el body solo para organizar el contenido */
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.2rem;
-    width: 100%; /* Asegura que el body ocupe el 100% del html */
+    margin:0;
+    min-height:100vh;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    background: linear-gradient(to bottom, var(--bg-verde-medio), var(--bg-verde-oscuro));
+    color:var(--texto-claro);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:1.2rem;
 }
 }
 h1{ margin:0.5rem 0 1rem 0; 
@@ -285,6 +281,7 @@ overflow: hidden;
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
+
 
 
 
