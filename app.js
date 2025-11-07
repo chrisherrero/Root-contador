@@ -19,6 +19,7 @@ const mensajeGanadorDiv = document.getElementById('mensajeGanador');
 numJugadoresSelect.addEventListener('change', generarTablero);
 resetBtn.addEventListener('click', generarTablero);
 iniciarBtn.addEventListener('click', comenzarPartida);
+switchAlcance.addEventListener('change', calcularAlcanceYActualizarUI);
 
 let volverConfirmando = false;
 let volverTimeoutId = null;
@@ -443,6 +444,7 @@ if(estado){
     }
 }
 });
+
 
 
 
