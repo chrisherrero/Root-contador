@@ -291,6 +291,7 @@ jugadores.forEach((j, idx) => {
     nombreInput.value = j.nombre;
     nombreInput.style.color = textoClaro;
     nombreInput.style.background = 'transparent';
+    nombreInput.readOnly = true;
 
 
 const puntosDiv = document.createElement('div');
@@ -444,6 +445,7 @@ if(estado){
     }
 }
 });
+
 
 
 
