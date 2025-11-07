@@ -1,16 +1,16 @@
 /* Datos facciones (colores y alcances base) */
 const facciones = [
-    { nombre: "Marquesado", color: "#f7852a", alcanceBase: 10 },
-    { nombre: "Nido de Águilas", color: "#325a9b", alcanceBase: 7 },
-    { nombre: "Alianza del Bosque", color: "#6cc46d", alcanceBase: 3 },
-    { nombre: "Vagabundo (B)", color: "#f7f7f7", alcanceBase: 5 }, // blanco
-    { nombre: "Vagabundo (N)", color: "#111111", alcanceBase: 2 }, // negro (base 2, regla dinámica)
-    { nombre: "Compañía del Río", color: "#5fc9e3", alcanceBase: 5 },
-    { nombre: "Culto Reptiliano", color: "#f0e300", alcanceBase: 2 },
-    { nombre: "Ducado Subterráneo", color: "#e6cfa7", alcanceBase: 8 },
-    { nombre: "Conspiración Córvida", color: "#5c3a91", alcanceBase: 3 },
-    { nombre: "Señor de los Cientos", color: "#e04b3e", alcanceBase: 9 },
-    { nombre: "Guardianes de Hierro", color: "#555555", alcanceBase: 8 }
+    { nombre: "Marquesado", color: "#f7852a", alcanceBase: 10, tipo: "belicosa" },
+    { nombre: "Nido de Águilas", color: "#325a9b", alcanceBase: 7, tipo: "belicosa" },
+    { nombre: "Alianza del Bosque", color: "#6cc46d", alcanceBase: 3, tipo: "insurgente" },
+    { nombre: "Vagabundo (B)", color: "#f7f7f7", alcanceBase: 5, tipo: "insurgente" },
+    { nombre: "Vagabundo (N)", color: "#111111", alcanceBase: 2, tipo: "insurgente" },
+    { nombre: "Compañía del Río", color: "#5fc9e3", alcanceBase: 5, tipo: "insurgente" },
+    { nombre: "Culto Reptiliano", color: "#f0e300", alcanceBase: 2, tipo: "insurgente" },
+    { nombre: "Ducado Subterráneo", color: "#e6cfa7", alcanceBase: 8, tipo: "belicosa" },
+    { nombre: "Conspiración Córvida", color: "#5c3a91", alcanceBase: 3, tipo: "insurgente" },
+    { nombre: "Señor de los Cientos", color: "#e04b3e", alcanceBase: 9, tipo: "belicosa" },
+    { nombre: "Guardianes de Hierro", color: "#555555", alcanceBase: 8, tipo: "belicosa" }
 ];
 
 const alcanceMinimoPorJugadores = { 2:17, 3:18, 4:21, 5:25, 6:28 };
@@ -227,4 +227,5 @@ Para una partida equilibrada, la suma del Alcance de todas las facciones debe se
 • El primer Vagabundo (B o N) tiene un Alcance de 5.
 • Si se añade un segundo Vagabundo, este solo tiene un Alcance de 2.
 `;
+
 
