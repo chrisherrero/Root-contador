@@ -264,6 +264,246 @@ overlay.addEventListener("click", (e) => {
     }
 });
 
+const sugerirBtn = document.getElementById('sugerirFaccionesBtn');
+const sugerenciasResultado = document.getElementById('sugerenciasResultado');
+
+
+let sugeridasGlobal = [];
+let seleccionadasGlobal = [];
+let faccionBloqueadaGlobal = null;
+let belicosaGarantizadaGlobal = null;
+let numJugadoresGlobal = 0;
+
+
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+
+function renderSugerencias() {
+    sugerenciasResultado.innerHTML = ''; 
+
+
+    const belicosaElegida = seleccionadasGlobal.includes(belicosaGarantizadaGlobal);
+    const seAlcanzoLimite = seleccionadasGlobal.length >= numJugadoresGlobal;
+
+
+    sugerenciasResultado.innerHTML += `
+        <div class="flex justify-between items-center mb-2">
+            <div class="text-gray-300 text-sm">Grupo de ${sugeridasGlobal.length} facciones (Selecciona ${numJugadoresGlobal}):</div>
+            <button id="closeSugerenciasBtn" type="button" title="Cerrar sugerencias" class="w-6 h-6 rounded-full bg-gray-700/80 hover:bg-gray-600 text-white flex items-center justify-center shadow-sm transition-colors">✕</button>
+        </div>
+    `;
+    
+
+    sugeridasGlobal.forEach(f => {
+
+        const nombre = f.nombre;
+        const isSelected = seleccionadasGlobal.includes(nombre);
+        const isBlocked = (nombre === faccionBloqueadaGlobal && !belicosaElegida);
+        const isDisabled = (!isSelected && seAlcanzoLimite && !isBlocked);
+
+        let classes = "p-2.5 rounded-md font-semibold cursor-pointer transition-all duration-150 ease-in-out";
+        let contentHTML = ""; 
+
+        const esOscuro = esColorOscuro(f.color);
+        classes += esOscuro ? ' text-white' : ' text-gray-900';
+        
+        if (isBlocked) {
+            classes += " opacity-50 cursor-not-allowed";
+            contentHTML = `
+                <span class="line-through">${f.nombre}</span>
+                <span class="font-normal text-sm text-red-300"> (Bloqueada)</span>
+            `;
+        } else {
+            const tipoText = f.tipo === 'belicosa' ? '(Belicosa)' : '(Insurgente)';
+            contentHTML = `
+                ${f.nombre}
+                <span class="font-normal opacity-80 text-sm">${tipoText}</span>
+            `;
+            
+            if (isSelected) {
+                classes += " ring-4 ring-offset-2 ring-offset-gray-800 ring-blue-400";
+            } else if (isDisabled) {
+                classes += " opacity-40 cursor-not-allowed";
+            } else {
+                classes += " hover:scale-103 hover:shadow-lg";
+            }
+        }
+        
+        sugerenciasResultado.innerHTML += `
+            <div class="${classes}" style="background-color: ${f.color};" data-faction-nombre="${nombre}">
+                ${contentHTML}
+            </div>
+        `;
+    });
+    
+
+    if (faccionBloqueadaGlobal) {
+        sugerenciasResultado.innerHTML += `
+            <div class="text-gray-400 text-xs mt-3 p-2 bg-gray-800 rounded-md">
+                <strong>Regla 8.1.1:</strong> La facción <strong>"${faccionBloqueadaGlobal}"</strong> está bloqueada. No puede ser elegida hasta que la única facción Belicosa (<strong>${belicosaGarantizadaGlobal}</strong>) haya sido elegida.
+            </div>
+        `;
+    }
+
+ 
+    let botonAceptarHTML = '';
+    if (seleccionadasGlobal.length === numJugadoresGlobal) {
+        botonAceptarHTML = `<button id="aceptarSugerenciasBtn" class="mt-3 w-full bg-green-600 hover:bg-green-500 px-4 py-3 rounded-lg text-white font-semibold shadow-md transition text-lg">Aceptar y Configurar</button>`;
+    } else {
+        botonAceptarHTML = `<button class="mt-3 w-full bg-gray-600 px-4 py-3 rounded-lg text-gray-400 font-semibold shadow-md cursor-not-allowed text-lg" disabled>Aceptar y Configurar</button>`;
+    }
+
+    sugerenciasResultado.innerHTML += `
+        <div class="mt-4 pt-4 border-t border-gray-600 text-center">
+            <span class="text-lg text-white font-semibold">Seleccionadas: ${seleccionadasGlobal.length} / ${numJugadoresGlobal}</span>
+            ${botonAceptarHTML}
+        </div>
+    `;
+}
+
+
+function aceptarSugerencias() {
+ 
+    const selectsConfig = Array.from(document.querySelectorAll("select[id^='faccionSelect_']"));
+    
+
+    selectsConfig.forEach(sel => sel.value = "");
+
+    seleccionadasGlobal.forEach((nombre, idx) => {
+        if (selectsConfig[idx]) {
+            selectsConfig[idx].value = nombre;
+        }
+    });
+
+ 
+    manejarCambio();
+
+    closeAllModals();
+
+    sugeridasGlobal = [];
+    seleccionadasGlobal = [];
+    faccionBloqueadaGlobal = null;
+    belicosaGarantizadaGlobal = null;
+    numJugadoresGlobal = 0;
+}
+
+
+sugerirBtn.addEventListener('click', () => {
+
+    numJugadoresGlobal = parseInt(document.getElementById('numJugadores').value) || 4;
+
+    const belicosas = facciones.filter(f => f.tipo === 'belicosa');
+    const insurgentes = facciones.filter(f => f.tipo === 'insurgente');
+    let poolBelicosas = shuffleArray([...belicosas]);
+    let poolInsurgentes = shuffleArray([...insurgentes]);
+    let sugeridas = [];
+
+
+    const belicosaGarantizada = poolBelicosas.pop();
+    if (belicosaGarantizada) {
+        sugeridas.push(belicosaGarantizada);
+    }
+
+
+    let mazoRestante = shuffleArray([...poolBelicosas, ...poolInsurgentes]);
+    for (let i = 0; i < numJugadoresGlobal; i++) {
+        if (mazoRestante.length > 0) {
+            sugeridas.push(mazoRestante.pop());
+        }
+    }
+    
+
+    const ultimaFaccion = sugeridas[sugeridas.length - 1];
+    const numBelicosasTotal = sugeridas.filter(f => f.tipo === 'belicosa').length;
+    let faccionBloqueada = null;
+    
+    if (ultimaFaccion && ultimaFaccion.tipo === 'insurgente' && numBelicosasTotal === 1) {
+        faccionBloqueada = ultimaFaccion; 
+    }
+    
+
+    sugeridasGlobal = shuffleArray(sugeridas); 
+    seleccionadasGlobal = []; 
+    faccionBloqueadaGlobal = faccionBloqueada ? faccionBloqueada.nombre : null;
+    belicosaGarantizadaGlobal = belicosaGarantizada ? belicosaGarantizada.nombre : null;
+
+
+    renderSugerencias();
+});
+
+
+sugerenciasResultado.addEventListener('click', (e) => {
+    
+
+    const closeBtn = e.target.closest('#closeSugerenciasBtn');
+    if (closeBtn) {
+
+        sugerenciasResultado.innerHTML = '';
+
+        sugeridasGlobal = [];
+        seleccionadasGlobal = [];
+        faccionBloqueadaGlobal = null;
+        belicosaGarantizadaGlobal = null;
+        numJugadoresGlobal = 0;
+        return; 
+    }
+
+ 
+    const acceptBtn = e.target.closest('#aceptarSugerenciasBtn');
+    if (acceptBtn) {
+        aceptarSugerencias();
+        return;
+    }
+
+
+    const factionDiv = e.target.closest('[data-faction-nombre]');
+    if (!factionDiv) return;
+
+    const faccionNombre = factionDiv.dataset.factionNombre;
+    if (!faccionNombre) return;
+
+
+    const belicosaElegida = seleccionadasGlobal.includes(belicosaGarantizadaGlobal);
+    const isBlocked = (faccionNombre === faccionBloqueadaGlobal && !belicosaElegida);
+    
+    if (isBlocked) {
+        return; D
+    }
+
+  
+    const index = seleccionadasGlobal.indexOf(faccionNombre);
+    
+    if (index > -1) {
+       
+        seleccionadasGlobal.splice(index, 1);
+
+    
+        if (faccionNombre === belicosaGarantizadaGlobal) {
+            const indexBloqueada = seleccionadasGlobal.indexOf(faccionBloqueadaGlobal);
+            if (indexBloqueada > -1) {
+                seleccionadasGlobal.splice(indexBloqueada, 1);
+            }
+        }
+   
+
+    } else {
+      
+        if (seleccionadasGlobal.length < numJugadoresGlobal) {
+            seleccionadasGlobal.push(faccionNombre);
+        } else {
+            return;
+        }
+    }
+
+    renderSugerencias();
+});
 
 
 
