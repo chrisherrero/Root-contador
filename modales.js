@@ -315,10 +315,10 @@ function renderSugerencias() {
         classes += esOscuro ? ' text-white' : ' text-gray-900';
         
         if (isBlocked) {
-            classes += " opacity-50 cursor-not-allowed";
+            classes += " opacity-65 cursor-not-allowed";
             contentHTML = `
                 <span class="line-through">${f.nombre}</span>
-                <span class="font-normal text-sm text-red-300"> (Bloqueada)</span>
+                <span class="font-bold text-base text-red-600"> (Bloqueada)</span>
             `;
         } else {
             const tipoText = f.tipo === 'belicosa' ? '(Belicosa)' : '(Insurgente)';
@@ -528,6 +528,7 @@ sugerenciasResultado.addEventListener('click', (e) => {
     
     renderSugerencias();
 });
+
 
 
 
