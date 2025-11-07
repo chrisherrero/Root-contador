@@ -396,22 +396,49 @@ function aceptarSugerencias() {
 
 
 sugerirBtn.addEventListener('click', () => {
+    
+    // --- Leer exclusiones de secuaces ---
+    const checks = document.querySelectorAll('.hireling-check:checked');
+    // Convertido a 'let' para poder modificarlo
+    let excluidas = Array.from(checks).map(cb => cb.value);
 
+    // --- ¡SOLUCIÓN VAGABUNDOS! ---
+    // Si el checkbox "Vaga" (que tiene value="Vagabundo (N)") está marcado...
+    if (excluidas.includes("Vagabundo (N)")) {
+        // ...añade también al Vagabundo (B) a la lista de exclusión.
+        excluidas.push("Vagabundo (B)");
+    }
+    // --- FIN SOLUCIÓN ---
+
+    // 1. Obtener número de jugadores
     numJugadoresGlobal = parseInt(document.getElementById('numJugadores').value) || 4;
 
-    const belicosas = facciones.filter(f => f.tipo === 'belicosa');
-    const insurgentes = facciones.filter(f => f.tipo === 'insurgente');
+    // 2. Separar facciones (¡CON FILTRO DE EXCLUSIÓN!)
+    const belicosas = facciones.filter(f => 
+        f.tipo === 'belicosa' && !excluidas.includes(f.nombre)
+    );
+    const insurgentes = facciones.filter(f => 
+        f.tipo === 'insurgente' && !excluidas.includes(f.nombre)
+    );
+    
+    // --- Comprobación por si el usuario bloqueó demasiadas facciones ---
+    if (belicosas.length === 0) {
+        sugerenciasResultado.innerHTML = `<div class="text-red-400 text-sm p-2 bg-red-900/50 rounded-md">Error: Has excluido a todas las facciones Belicosas. No se puede generar un grupo.</div>`;
+        return;
+    }
+    // ---
+
     let poolBelicosas = shuffleArray([...belicosas]);
     let poolInsurgentes = shuffleArray([...insurgentes]);
     let sugeridas = [];
 
-
+    // 3. Regla 8.1: Robar 1 belicosa garantizada
     const belicosaGarantizada = poolBelicosas.pop();
     if (belicosaGarantizada) {
         sugeridas.push(belicosaGarantizada);
     }
 
-
+    // 4. Crear mazo restante y robar N cartas
     let mazoRestante = shuffleArray([...poolBelicosas, ...poolInsurgentes]);
     for (let i = 0; i < numJugadoresGlobal; i++) {
         if (mazoRestante.length > 0) {
@@ -419,7 +446,7 @@ sugerirBtn.addEventListener('click', () => {
         }
     }
     
-
+    // 5. Lógica de Bloqueo (Regla 8.1.1)
     const ultimaFaccion = sugeridas[sugeridas.length - 1];
     const numBelicosasTotal = sugeridas.filter(f => f.tipo === 'belicosa').length;
     let faccionBloqueada = null;
@@ -428,80 +455,13 @@ sugerirBtn.addEventListener('click', () => {
         faccionBloqueada = ultimaFaccion; 
     }
     
-
-    sugeridasGlobal = shuffleArray(sugeridas); 
-    seleccionadasGlobal = []; 
+    // 6. Guardar estado en variables globales
+    sugeridasGlobal = shuffleArray(sugeridas); // Barajamos el pool final
+    seleccionadasGlobal = []; // Resetear selección
     faccionBloqueadaGlobal = faccionBloqueada ? faccionBloqueada.nombre : null;
     belicosaGarantizadaGlobal = belicosaGarantizada ? belicosaGarantizada.nombre : null;
 
-
-    renderSugerencias();
-});
-
-
-sugerenciasResultado.addEventListener('click', (e) => {
-    
-
-    const closeBtn = e.target.closest('#closeSugerenciasBtn');
-    if (closeBtn) {
-
-        sugerenciasResultado.innerHTML = '';
-
-        sugeridasGlobal = [];
-        seleccionadasGlobal = [];
-        faccionBloqueadaGlobal = null;
-        belicosaGarantizadaGlobal = null;
-        numJugadoresGlobal = 0;
-        return; 
-    }
-
- 
-    const acceptBtn = e.target.closest('#aceptarSugerenciasBtn');
-    if (acceptBtn) {
-        aceptarSugerencias();
-        return;
-    }
-
-
-    const factionDiv = e.target.closest('[data-faction-nombre]');
-    if (!factionDiv) return;
-
-    const faccionNombre = factionDiv.dataset.factionNombre;
-    if (!faccionNombre) return;
-
-
-    const belicosaElegida = seleccionadasGlobal.includes(belicosaGarantizadaGlobal);
-    const isBlocked = (faccionNombre === faccionBloqueadaGlobal && !belicosaElegida);
-    
-    if (isBlocked) {
-        return; D
-    }
-
-  
-    const index = seleccionadasGlobal.indexOf(faccionNombre);
-    
-    if (index > -1) {
-       
-        seleccionadasGlobal.splice(index, 1);
-
-    
-        if (faccionNombre === belicosaGarantizadaGlobal) {
-            const indexBloqueada = seleccionadasGlobal.indexOf(faccionBloqueadaGlobal);
-            if (indexBloqueada > -1) {
-                seleccionadasGlobal.splice(indexBloqueada, 1);
-            }
-        }
-   
-
-    } else {
-      
-        if (seleccionadasGlobal.length < numJugadoresGlobal) {
-            seleccionadasGlobal.push(faccionNombre);
-        } else {
-            return;
-        }
-    }
-
+    // 7. Llamar al primer render
     renderSugerencias();
 });
 
