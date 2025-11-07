@@ -46,7 +46,7 @@ const qrPlaceholder = document.getElementById('qr-placeholder');
 let qrCode = null; 
 
 
-const linkParaElQR = "https://chrisherrero.github.io/Root-contador/"; // <--- AQUI SE CAMBIA EL LINK PARA EL QR AUTOGENERADO
+const linkParaElQR = "https://chrisherrero.github.io/Root-contador/"; // <--- ACA SE CAMBIA EL LINK PARA EL QR AUTOGENERADO
 
 function closeAllModals() {
     overlay.classList.add("hidden");
@@ -115,7 +115,7 @@ closeGuiaModalBtn.addEventListener('click', () => {
     guiaModal.classList.add('hidden');
     guiaModal.classList.remove('flex');
 
-    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) { // Check both overlay and QR modal
+    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) {
         document.body.classList.remove("no-scroll");
     }
 });
@@ -235,13 +235,13 @@ toggleSummaryBtn.addEventListener("click", () => {
 
         detailsText.textContent = details.dataset.summaryText;
         detailsMode.textContent = details.dataset.summaryMode;
-        toggleSummaryBtn.textContent = "Ver Preparación"; // Cambiar texto del botón
+        toggleSummaryBtn.textContent = "Ver Preparación"; 
         details.dataset.showing = "summary";
     } else {
   
         detailsText.textContent = details.dataset.prepText;
         detailsMode.textContent = details.dataset.prepMode;
-        toggleSummaryBtn.textContent = "Ver Resumen"; // Cambiar texto del botón
+        toggleSummaryBtn.textContent = "Ver Resumen"; 
         details.dataset.showing = "prep";
     }
 });
@@ -260,7 +260,7 @@ closeDetails.addEventListener("click", () => {
 
 overlay.addEventListener("click", (e) => {
     if (e.target === overlay) {
-        closeAllModals(); // Debe llamar a la función que cierra todo
+        closeAllModals(); 
     }
 });
 
@@ -528,6 +528,7 @@ sugerenciasResultado.addEventListener('click', (e) => {
     
     renderSugerencias();
 });
+
 
 
 
