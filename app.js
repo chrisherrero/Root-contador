@@ -346,6 +346,21 @@ puntosDiv.classList.add('pop-anim');
     });
 });
 
+const tableroOrdenable = document.getElementById('tableroJuego');
+    new Sortable(tableroOrdenable, {
+        animation: 150, 
+        delay: 200, 
+        delayOnTouchOnly: false, 
+        ghostClass: 'clase-fantasma', 
+        chosenClass: 'clase-arrastrando', 
+
+
+        onEnd: function (evt) {
+        
+            guardarEstadoJuego();
+        }
+    });
+
 
 pantallaConfig.classList.remove('activa');
 pantallaConfig.classList.add('pantalla');
@@ -445,6 +460,7 @@ if(estado){
     }
 }
 });
+
 
 
 
