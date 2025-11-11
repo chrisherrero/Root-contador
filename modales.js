@@ -25,8 +25,6 @@ function closeAllModals() {
     guiaModal.classList.add("hidden");
     guiaModal.classList.remove("flex");
     document.body.classList.remove("no-scroll");
-
-
 }
 
 function closeSubModal(modalToClose) {
@@ -38,30 +36,28 @@ function closeSubModal(modalToClose) {
 }
 
 openBtn.addEventListener("click", () => {
-overlay.classList.remove("hidden");
-prepWindow.classList.remove("hidden");
-document.body.classList.add("no-scroll");
+    overlay.classList.remove("hidden");
+    prepWindow.classList.remove("hidden");
+    document.body.classList.add("no-scroll");
 });
 
-
-
-const qrTriggers = document.querySelectorAll('.showQR-trigger'); 
+const qrTriggers = document.querySelectorAll('.showQR-trigger');
 const qrModal = document.getElementById('qrModal');
 const closeQR = document.getElementById('closeQR');
-const qrPlaceholder = document.getElementById('qr-placeholder'); 
-let qrCode = null; 
+const qrPlaceholder = document.getElementById('qr-placeholder');
+let qrCode = null;
 
-const linkParaElQR = "https://root.seiyria.com/"; 
+const linkParaElQR = "https://root.seiyria.com/";
 
 function openQRModal(e) {
     e.preventDefault();
     
     if (!qrCode) {
-    qrPlaceholder.innerHTML = ''; 
+    qrPlaceholder.innerHTML = '';
     qrCode = new QRCode(qrPlaceholder, {
         text: linkParaElQR,
-        width: 256, 
-        height: 256, 
+        width: 256,
+        height: 256,
         colorDark : "#000000",
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
@@ -84,21 +80,17 @@ openGuiaModalBtn.addEventListener('click', () => {
     document.body.classList.add("no-scroll");
 });
 
-
-
-
 closeQR.addEventListener('click', function() {
     qrModal.classList.add('hidden');
     qrModal.classList.remove('flex');
     document.body.classList.remove("no-scroll");
 });
 
-
 closeGuiaModalBtn.addEventListener('click', () => {
     guiaModal.classList.add('hidden');
     guiaModal.classList.remove('flex');
 
-    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) { // Check both overlay and QR modal
+    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) {
         document.body.classList.remove("no-scroll");
     }
 });
@@ -111,52 +103,48 @@ qrModal.addEventListener('click', function(e) {
     }
 });
 
-
 Object.entries(prepData).forEach(([faction, data]) => { const div = document.createElement("div");
-const color = factionColors[faction] || "#444"; 
-div.className = "p-3 rounded-xl text-white shadow-md text-center";
-div.style.backgroundColor = color;
+    const color = factionColors[faction] || "#444";
+    div.className = "p-3 rounded-xl text-white shadow-md text-center";
+    div.style.backgroundColor = color;
 
-if (["Marquesado", "Compañía del Río", "Culto Reptiliano", "Ducado Subterráneo", "Vagabundo (B)"].includes(faction)) {
-div.style.color = "#222"; 
-}
+    if (["Marquesado", "Compañía del Río", "Culto Reptiliano", "Ducado Subterráneo", "Vagabundo (B)"].includes(faction)) {
+    div.style.color = "#222";
+    }
 
-const buttons = [];
+    const buttons = [];
 
-if (data.normal) {
-buttons.push(
-    `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="normal">Normal</button>`
-    );
-}
+    if (data.normal) {
+    buttons.push(
+        `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="normal">Normal</button>`
+        );
+    }
 
-if (data.avanzada) {
-buttons.push(
-    `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="avanzada">Avanzada</button>`
-    );
-}
+    if (data.avanzada) {
+    buttons.push(
+        `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="avanzada">Avanzada</button>`
+        );
+    }
 
-const buttonsHtml = buttons.join(' ');
+    const buttonsHtml = buttons.join(' ');
 
-div.innerHTML = 
-`<div class="text-lg font-semibold mb-2 text-center">${faction}</div>` +
-`<div class="flex justify-center gap-2">${buttonsHtml}</div>`;
+    div.innerHTML =
+    `<div class="text-lg font-semibold mb-2 text-center">${faction}</div>` +
+    `<div class="flex justify-center gap-2">${buttonsHtml}</div>`;
 
+    prepList.appendChild(div);
 
-prepList.appendChild(div);
-
-if (faction === "Inicio de partida") {
+    if (faction === "Inicio de partida") {
         const separator = document.createElement('div');
-
         separator.className = 'h-[6px] w-11/12 mx-auto bg-gray-700 rounded-full my-1';
         prepList.appendChild(separator);
     }
-
 });
 
 closePrep.addEventListener("click", () => {
-overlay.classList.add("hidden");
-prepWindow.classList.add("hidden");
-document.body.classList.remove("no-scroll");
+    overlay.classList.add("hidden");
+    prepWindow.classList.add("hidden");
+    document.body.classList.remove("no-scroll");
 });
 
 prepList.addEventListener("click", (e) => {
@@ -181,7 +169,7 @@ prepList.addEventListener("click", (e) => {
         details.dataset.summaryMode = "Resumen de Facción";
         
         toggleSummaryBtn.textContent = "Ver Resumen";
-        details.dataset.showing = "prep"; // Estado actual
+        details.dataset.showing = "prep";
 
         summaryToggleContainer.classList.remove("hidden");
     } else {
@@ -201,7 +189,7 @@ alcanceHelpBtn.addEventListener("click", () => {
 
     summaryToggleContainer.classList.add("hidden");
 
-    details.dataset.openedFrom = 'config'; 
+    details.dataset.openedFrom = 'config';
 
     overlay.classList.remove("hidden");
     details.classList.remove("hidden");
@@ -212,41 +200,33 @@ toggleSummaryBtn.addEventListener("click", () => {
     const currentState = details.dataset.showing;
 
     if (currentState === "prep") {
-        // CAMBIAR A MODO RESUMEN
         detailsText.textContent = details.dataset.summaryText;
         detailsMode.textContent = details.dataset.summaryMode;
-        toggleSummaryBtn.textContent = "Ver Preparación"; // Cambiar texto del botón
+        toggleSummaryBtn.textContent = "Ver Preparación";
         details.dataset.showing = "summary";
     } else {
-        // CAMBIAR DE VUELTA A MODO PREPARACIÓN
         detailsText.textContent = details.dataset.prepText;
         detailsMode.textContent = details.dataset.prepMode;
-        toggleSummaryBtn.textContent = "Ver Resumen de Faccion"; // Cambiar texto del botón
+        toggleSummaryBtn.textContent = "Ver Resumen de Faccion";
         details.dataset.showing = "prep";
     }
 });
 
-// Cerrar detalle
 closeDetails.addEventListener("click", () => {
-    // Comprueba el 'dataset' que se puso al abrir el modal
     if (details.dataset.openedFrom === 'prep') {
-        // Si se abrió desde la lista, vuelve "Atrás" a la lista
         details.classList.add("hidden");
         prepWindow.classList.remove("hidden");
     } else {
-        // Si se abrió desde "Alcance [?]" (o cualquier otro lugar), Cierra TODO
-        closeAllModals(); 
+        closeAllModals();
     }
 });
-// Cerrar todo con overlay
-overlay.addEventListener("click", (e) => {
 
+overlay.addEventListener("click", (e) => {
     if (e.target === overlay) {
         overlay.classList.add("hidden");
         prepWindow.classList.add("hidden");
         details.classList.add("hidden");
 
-        // También cerrar QR y Guía si estuvieran abiertos
         qrModal.classList.add("hidden");
         qrModal.classList.remove("flex");
         guiaModal.classList.add("hidden");
@@ -270,15 +250,12 @@ function resetDraftState() {
 const sugerirBtn = document.getElementById('sugerirFaccionesBtn');
 const sugerenciasResultado = document.getElementById('sugerenciasResultado');
 
-// --- Estado Global del Modal de Draft ---
 let sugeridasGlobal = [];
 let seleccionadasGlobal = [];
 let faccionBloqueadaGlobal = null;
 let belicosaGarantizadaGlobal = null;
 let numJugadoresGlobal = 0;
-// ---
 
-// Función para barajar un array
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -287,17 +264,12 @@ function shuffleArray(array) {
     return array;
 }
 
-/**
- * Función Principal: Dibuja la lista de facciones basada en el estado global.
- */
 function renderSugerencias() {
-    sugerenciasResultado.innerHTML = ''; // Limpiar el contenedor
+    sugerenciasResultado.innerHTML = '';
 
-    // Comprobar estado de bloqueo y límite
     const belicosaElegida = seleccionadasGlobal.includes(belicosaGarantizadaGlobal);
     const seAlcanzoLimite = seleccionadasGlobal.length >= numJugadoresGlobal;
 
-    // Título con botón "X"
     sugerenciasResultado.innerHTML += `
         <div class="flex justify-between items-center mb-2">
             <div class="text-gray-300 text-sm">Grupo de ${sugeridasGlobal.length} facciones (Selecciona ${numJugadoresGlobal}):</div>
@@ -305,9 +277,7 @@ function renderSugerencias() {
         </div>
     `;
     
-    // Renderizar cada facción
     sugeridasGlobal.forEach(f => {
-        // ... (El resto de esta función no cambia)
         const nombre = f.nombre;
         const isSelected = seleccionadasGlobal.includes(nombre);
         const isBlocked = (nombre === faccionBloqueadaGlobal && !belicosaElegida);
@@ -348,7 +318,6 @@ function renderSugerencias() {
         `;
     });
     
-    // Renderizar la nota de bloqueo (si aplica)
     if (faccionBloqueadaGlobal) {
         sugerenciasResultado.innerHTML += `
             <div class="text-gray-400 text-xs mt-3 p-2 bg-gray-800 rounded-md">
@@ -357,7 +326,6 @@ function renderSugerencias() {
         `;
     }
 
-    // Renderizar contador y botón de Aceptar (sin cambios)
     let botonAceptarHTML = '';
     if (seleccionadasGlobal.length === numJugadoresGlobal) {
         botonAceptarHTML = `<button id="aceptarSugerenciasBtn" class="mt-3 w-full bg-green-600 hover:bg-green-500 px-4 py-3 rounded-lg text-white font-semibold shadow-md transition text-lg">Aceptar y Configurar</button>`;
@@ -373,38 +341,31 @@ function renderSugerencias() {
     `;
 }
 
-/**
- * Función: Aplica las facciones seleccionadas a la pantalla principal de configuración.
- */
 function aceptarSugerencias() {
-    // 1. Encontrar los <select> de la pantalla de configuración
     const selectsConfig = Array.from(document.querySelectorAll("select[id^='faccionSelect_']"));
     
-    // 2. Limpiar todos los <select> primero
     selectsConfig.forEach(sel => sel.value = "");
 
-    // 3. Asignar las facciones seleccionadas (en orden) a los <select>
     seleccionadasGlobal.forEach((nombre, idx) => {
         if (selectsConfig[idx]) {
             selectsConfig[idx].value = nombre;
         }
     });
 
-    // 4. ¡MUY IMPORTANTE! Llamar a la función que actualiza los colores y el alcance
     manejarCambio();
     
-    // 5. Cerrar todos los modales
     closeAllModals();
     
-
+    // Dejamos el reset para el botón de Sugerir
 }
 
-/**
- * Event Listener: Botón "Sugerir Facciones"
- * Prepara el estado inicial del draft.
- */
+// ------ ¡ARREGLO #1! ------
+// El botón Sugerir AHORA llama a resetDraftState() primero.
 sugerirBtn.addEventListener('click', () => {
     
+    // Limpia el estado y el HTML anterior ANTES de hacer nada.
+    resetDraftState(); 
+
     const checks = document.querySelectorAll('.hireling-check:checked');
     let excluidas = Array.from(checks).map(cb => cb.value);
 
@@ -428,38 +389,41 @@ sugerirBtn.addEventListener('click', () => {
 
     let poolBelicosas = shuffleArray([...belicosas]);
     let poolInsurgentes = shuffleArray([...insurgentes]);
-    let sugeridas = [];
-
+    
     const belicosaGarantizada = poolBelicosas.pop();
     if (belicosaGarantizada) {
-        sugeridas.push(belicosaGarantizada);
+        sugeridasGlobal.push(belicosaGarantizada);
+        belicosaGarantizadaGlobal = belicosaGarantizada.nombre;
     }
 
     let mazoRestante = shuffleArray([...poolBelicosas, ...poolInsurgentes]);
     for (let i = 0; i < numJugadoresGlobal; i++) {
         if (mazoRestante.length > 0) {
-            sugeridas.push(mazoRestante.pop());
+            sugeridasGlobal.push(mazoRestante.pop());
         }
     }
     
-    const ultimaFaccion = sugeridas[sugeridas.length - 1];
-    const numBelicosasTotal = sugeridas.filter(f => f.tipo === 'belicosa').length;
+    const ultimaFaccion = sugeridasGlobal[sugeridasGlobal.length - 1];
+    const numBelicosasTotal = sugeridasGlobal.filter(f => f.tipo === 'belicosa').length;
     let faccionBloqueada = null;
     
     if (ultimaFaccion && ultimaFaccion.tipo === 'insurgente' && numBelicosasTotal === 1) {
         faccionBloqueada = ultimaFaccion; 
+        faccionBloqueadaGlobal = ultimaFaccion.nombre;
     }
     
-    sugeridasGlobal = shuffleArray(sugeridas);
-    seleccionadasGlobal = [];
-    faccionBloqueadaGlobal = faccionBloqueada ? faccionBloqueada.nombre : null;
-    belicosaGarantizadaGlobal = belicosaGarantizada ? belicosaGarantizada.nombre : null;
+    sugeridasGlobal = shuffleArray(sugeridasGlobal);
+    seleccionadasGlobal = []; // <-- resetDraftState ya hizo esto, pero por si acaso.
+    
+    renderSugerencias();
+});
 
+// ------ ¡ARREGLO #2! ------
+// El listener de clics ahora está AFUERA, al nivel principal.
 sugerenciasResultado.addEventListener('click', (e) => {
     
     const closeBtn = e.target.closest('#closeSugerenciasBtn');
     if (closeBtn) {
-    
         resetDraftState(); 
         return; 
     }
@@ -506,8 +470,6 @@ sugerenciasResultado.addEventListener('click', (e) => {
     renderSugerencias();
 });
     
-    renderSugerencias();
-});
 
 
 
