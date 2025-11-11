@@ -23,6 +23,7 @@ switchAlcance.addEventListener('change', calcularAlcanceYActualizarUI);
 
 let volverConfirmando = false;
 let volverTimeoutId = null;
+let sortableInstance = null;
 
 volverBtn.addEventListener('click', () => {
 if (!volverConfirmando) {
@@ -347,16 +348,21 @@ puntosDiv.classList.add('pop-anim');
 });
 
 const tableroOrdenable = document.getElementById('tableroJuego');
-    new Sortable(tableroOrdenable, {
+    
+ 
+    if (sortableInstance) {
+        sortableInstance.destroy();
+    }
+
+  
+    sortableInstance = new Sortable(tableroOrdenable, {
         animation: 150, 
         delay: 200, 
         delayOnTouchOnly: false, 
         ghostClass: 'clase-fantasma', 
         chosenClass: 'clase-arrastrando', 
 
-
         onEnd: function (evt) {
-        
             guardarEstadoJuego();
         }
     });
@@ -461,6 +467,32 @@ if(estado){
 }
 });
 
+window.addEventListener('orientationchange', () => {
+    
+   
+    setTimeout(() => {
+        
+
+        if (pantallaJuego.classList.contains('activa') && sortableInstance) {
+            
+    
+            sortableInstance.destroy();
+            
+
+            const tableroOrdenable = document.getElementById('tableroJuego');
+            sortableInstance = new Sortable(tableroOrdenable, {
+                animation: 150,
+                delay: 200,
+                delayOnTouchOnly: false,
+                ghostClass: 'clase-fantasma',
+                chosenClass: 'clase-arrastrando',
+                onEnd: function (evt) {
+                    guardarEstadoJuego();
+                }
+            });
+        }
+    }, 100);
+});
 
 
 
