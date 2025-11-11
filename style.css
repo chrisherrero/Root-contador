@@ -280,6 +280,19 @@ overflow: hidden;
     outline: none;
 }
 
+.clase-fantasma {
+    opacity: 0.3;
+    background: #4a90e2;
+    border-radius: 14px;
+}
+
+
+.clase-arrastrando {
+    opacity: 0.9 !important; 
+    transform: scale(1.03); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4); 
+    cursor: grabbing;
+}
 
 
 
