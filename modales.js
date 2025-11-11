@@ -15,38 +15,6 @@ const openGuiaModalBtn = document.getElementById('openGuiaModal');
 const guiaModal = document.getElementById('guiaModal');
 const closeGuiaModalBtn = document.getElementById('closeGuiaModal');
 
-openBtn.addEventListener("click", () => {
-overlay.classList.remove("hidden");
-prepWindow.classList.remove("hidden");
-document.body.classList.add("no-scroll");
-});
-
-alcanceHelpBtn.addEventListener("click", () => {
-
-    detailsTitle.textContent = "Explicación de 'Alcance' (Reach)";
-    detailsMode.textContent = "Regla de Equilibrio de Partida";
-    detailsText.textContent = alcanceHelpText;
-
-
-    summaryToggleContainer.classList.add("hidden");
-
-
-    details.dataset.openedFrom = 'config'; 
-
-    overlay.classList.remove("hidden");
-    details.classList.remove("hidden");
-    document.body.classList.add("no-scroll");
-});
-
-    
-const qrTriggers = document.querySelectorAll('.showQR-trigger'); 
-const qrModal = document.getElementById('qrModal');
-const closeQR = document.getElementById('closeQR');
-const qrPlaceholder = document.getElementById('qr-placeholder');
-let qrCode = null; 
-
-
-const linkParaElQR = "https://chrisherrero.github.io/Root-contador/"; // <--- ACA SE CAMBIA EL LINK PARA EL QR AUTOGENERADO
 
 function closeAllModals() {
     overlay.classList.add("hidden");
@@ -57,6 +25,8 @@ function closeAllModals() {
     guiaModal.classList.add("hidden");
     guiaModal.classList.remove("flex");
     document.body.classList.remove("no-scroll");
+
+
 }
 
 function closeSubModal(modalToClose) {
@@ -67,16 +37,30 @@ function closeSubModal(modalToClose) {
     }
 }
 
+openBtn.addEventListener("click", () => {
+overlay.classList.remove("hidden");
+prepWindow.classList.remove("hidden");
+document.body.classList.add("no-scroll");
+});
+
+
+
+const qrTriggers = document.querySelectorAll('.showQR-trigger'); 
+const qrModal = document.getElementById('qrModal');
+const closeQR = document.getElementById('closeQR');
+const qrPlaceholder = document.getElementById('qr-placeholder'); 
+let qrCode = null; 
+
+const linkParaElQR = "https://root.seiyria.com/"; 
 
 function openQRModal(e) {
     e.preventDefault();
     
-
     if (!qrCode) {
-    qrPlaceholder.innerHTML = '';
+    qrPlaceholder.innerHTML = ''; 
     qrCode = new QRCode(qrPlaceholder, {
         text: linkParaElQR,
-        width: 256,
+        width: 256, 
         height: 256, 
         colorDark : "#000000",
         colorLight : "#ffffff",
@@ -88,7 +72,6 @@ function openQRModal(e) {
     qrModal.classList.add('flex');
     document.body.classList.add("no-scroll");
 }
-
 
 qrTriggers.forEach(trigger => {
     trigger.addEventListener('click', openQRModal);
@@ -115,11 +98,10 @@ closeGuiaModalBtn.addEventListener('click', () => {
     guiaModal.classList.add('hidden');
     guiaModal.classList.remove('flex');
 
-    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) {
+    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) { // Check both overlay and QR modal
         document.body.classList.remove("no-scroll");
     }
 });
-
 
 qrModal.addEventListener('click', function(e) {
     if (e.target === qrModal) {
@@ -135,28 +117,23 @@ const color = factionColors[faction] || "#444";
 div.className = "p-3 rounded-xl text-white shadow-md text-center";
 div.style.backgroundColor = color;
 
-
 if (["Marquesado", "Compañía del Río", "Culto Reptiliano", "Ducado Subterráneo", "Vagabundo (B)"].includes(faction)) {
 div.style.color = "#222"; 
 }
 
-
 const buttons = [];
 
 if (data.normal) {
-
 buttons.push(
     `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="normal">Normal</button>`
     );
 }
 
 if (data.avanzada) {
-    
 buttons.push(
     `<button class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg" data-faction="${faction}" data-mode="avanzada">Avanzada</button>`
     );
 }
-
 
 const buttonsHtml = buttons.join(' ');
 
@@ -176,14 +153,11 @@ if (faction === "Inicio de partida") {
 
 });
 
-
-
 closePrep.addEventListener("click", () => {
 overlay.classList.add("hidden");
 prepWindow.classList.add("hidden");
 document.body.classList.remove("no-scroll");
 });
-
 
 prepList.addEventListener("click", (e) => {
     const btn = e.target.closest("button[data-faction]");
@@ -192,90 +166,119 @@ prepList.addEventListener("click", (e) => {
     const faction = btn.dataset.faction;
     const mode = btn.dataset.mode;
     
- 
     const prepText = prepData[faction][mode];
     const prepModeText = mode === "normal" ? "Preparación Básica" : "Preparación Avanzada";
- 
     const summaryText = (typeof factionSummaries !== 'undefined') ? factionSummaries[faction] : null;
 
- 
     detailsTitle.textContent = faction;
     detailsMode.textContent = prepModeText;
     detailsText.textContent = prepText;
 
-
     if (summaryText) {
-
         details.dataset.prepText = prepText;
         details.dataset.prepMode = prepModeText;
         details.dataset.summaryText = summaryText;
         details.dataset.summaryMode = "Resumen de Facción";
         
-
         toggleSummaryBtn.textContent = "Ver Resumen";
-        details.dataset.showing = "prep"; 
-
+        details.dataset.showing = "prep"; // Estado actual
 
         summaryToggleContainer.classList.remove("hidden");
     } else {
-
         summaryToggleContainer.classList.add("hidden");
     }
 
     details.dataset.openedFrom = 'prep';
-    
+
     prepWindow.classList.add("hidden");
     details.classList.remove("hidden");
+});
+
+alcanceHelpBtn.addEventListener("click", () => {
+    detailsTitle.textContent = "Explicación de 'Alcance' (Reach)";
+    detailsMode.textContent = "Regla de Equilibrio de Partida";
+    detailsText.textContent = alcanceHelpText;
+
+    summaryToggleContainer.classList.add("hidden");
+
+    details.dataset.openedFrom = 'config'; 
+
+    overlay.classList.remove("hidden");
+    details.classList.remove("hidden");
+    document.body.classList.add("no-scroll");
 });
 
 toggleSummaryBtn.addEventListener("click", () => {
     const currentState = details.dataset.showing;
 
     if (currentState === "prep") {
-
+        // CAMBIAR A MODO RESUMEN
         detailsText.textContent = details.dataset.summaryText;
         detailsMode.textContent = details.dataset.summaryMode;
-        toggleSummaryBtn.textContent = "Ver Preparación"; 
+        toggleSummaryBtn.textContent = "Ver Preparación"; // Cambiar texto del botón
         details.dataset.showing = "summary";
     } else {
-  
+        // CAMBIAR DE VUELTA A MODO PREPARACIÓN
         detailsText.textContent = details.dataset.prepText;
         detailsMode.textContent = details.dataset.prepMode;
-        toggleSummaryBtn.textContent = "Ver Resumen"; 
+        toggleSummaryBtn.textContent = "Ver Resumen de Faccion"; // Cambiar texto del botón
         details.dataset.showing = "prep";
     }
 });
 
+// Cerrar detalle
 closeDetails.addEventListener("click", () => {
+    // Comprueba el 'dataset' que se puso al abrir el modal
     if (details.dataset.openedFrom === 'prep') {
-
+        // Si se abrió desde la lista, vuelve "Atrás" a la lista
         details.classList.add("hidden");
         prepWindow.classList.remove("hidden");
     } else {
-
+        // Si se abrió desde "Alcance [?]" (o cualquier otro lugar), Cierra TODO
         closeAllModals(); 
     }
 });
-
-
+// Cerrar todo con overlay
 overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) {
-        closeAllModals(); 
-    }
+
+    if (e.target === overlay) {
+        overlay.classList.add("hidden");
+        prepWindow.classList.add("hidden");
+        details.classList.add("hidden");
+
+        // También cerrar QR y Guía si estuvieran abiertos
+        qrModal.classList.add("hidden");
+        qrModal.classList.remove("flex");
+        guiaModal.classList.add("hidden");
+        guiaModal.classList.remove("flex");
+
+        document.body.classList.remove("no-scroll");
+    }
 });
+
+function resetDraftState() {
+    if (sugerenciasResultado) {
+        sugerenciasResultado.innerHTML = '';
+    }
+    sugeridasGlobal = [];
+    seleccionadasGlobal = [];
+    faccionBloqueadaGlobal = null;
+    belicosaGarantizadaGlobal = null;
+    numJugadoresGlobal = 0;
+}
 
 const sugerirBtn = document.getElementById('sugerirFaccionesBtn');
 const sugerenciasResultado = document.getElementById('sugerenciasResultado');
 
-
+// --- Estado Global del Modal de Draft ---
 let sugeridasGlobal = [];
 let seleccionadasGlobal = [];
 let faccionBloqueadaGlobal = null;
 let belicosaGarantizadaGlobal = null;
 let numJugadoresGlobal = 0;
+// ---
 
-
-
+// Función para barajar un array
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -284,15 +287,17 @@ function shuffleArray(array) {
     return array;
 }
 
-
+/**
+ * Función Principal: Dibuja la lista de facciones basada en el estado global.
+ */
 function renderSugerencias() {
-    sugerenciasResultado.innerHTML = ''; 
+    sugerenciasResultado.innerHTML = ''; // Limpiar el contenedor
 
-
+    // Comprobar estado de bloqueo y límite
     const belicosaElegida = seleccionadasGlobal.includes(belicosaGarantizadaGlobal);
     const seAlcanzoLimite = seleccionadasGlobal.length >= numJugadoresGlobal;
 
-
+    // Título con botón "X"
     sugerenciasResultado.innerHTML += `
         <div class="flex justify-between items-center mb-2">
             <div class="text-gray-300 text-sm">Grupo de ${sugeridasGlobal.length} facciones (Selecciona ${numJugadoresGlobal}):</div>
@@ -300,9 +305,9 @@ function renderSugerencias() {
         </div>
     `;
     
-
+    // Renderizar cada facción
     sugeridasGlobal.forEach(f => {
-
+        // ... (El resto de esta función no cambia)
         const nombre = f.nombre;
         const isSelected = seleccionadasGlobal.includes(nombre);
         const isBlocked = (nombre === faccionBloqueadaGlobal && !belicosaElegida);
@@ -315,7 +320,7 @@ function renderSugerencias() {
         classes += esOscuro ? ' text-white' : ' text-gray-900';
         
         if (isBlocked) {
-            classes += " opacity-65 cursor-not-allowed";
+            classes += " opacity-70 cursor-not-allowed";
             contentHTML = `
                 <span class="line-through">${f.nombre}</span>
                 <span class="font-bold text-base text-red-600"> (Bloqueada)</span>
@@ -343,7 +348,7 @@ function renderSugerencias() {
         `;
     });
     
-
+    // Renderizar la nota de bloqueo (si aplica)
     if (faccionBloqueadaGlobal) {
         sugerenciasResultado.innerHTML += `
             <div class="text-gray-400 text-xs mt-3 p-2 bg-gray-800 rounded-md">
@@ -352,7 +357,7 @@ function renderSugerencias() {
         `;
     }
 
- 
+    // Renderizar contador y botón de Aceptar (sin cambios)
     let botonAceptarHTML = '';
     if (seleccionadasGlobal.length === numJugadoresGlobal) {
         botonAceptarHTML = `<button id="aceptarSugerenciasBtn" class="mt-3 w-full bg-green-600 hover:bg-green-500 px-4 py-3 rounded-lg text-white font-semibold shadow-md transition text-lg">Aceptar y Configurar</button>`;
@@ -368,49 +373,46 @@ function renderSugerencias() {
     `;
 }
 
-
+/**
+ * Función: Aplica las facciones seleccionadas a la pantalla principal de configuración.
+ */
 function aceptarSugerencias() {
- 
+    // 1. Encontrar los <select> de la pantalla de configuración
     const selectsConfig = Array.from(document.querySelectorAll("select[id^='faccionSelect_']"));
     
-
+    // 2. Limpiar todos los <select> primero
     selectsConfig.forEach(sel => sel.value = "");
 
+    // 3. Asignar las facciones seleccionadas (en orden) a los <select>
     seleccionadasGlobal.forEach((nombre, idx) => {
         if (selectsConfig[idx]) {
             selectsConfig[idx].value = nombre;
         }
     });
 
- 
+    // 4. ¡MUY IMPORTANTE! Llamar a la función que actualiza los colores y el alcance
     manejarCambio();
-
+    
+    // 5. Cerrar todos los modales
     closeAllModals();
+    
 
-    sugeridasGlobal = [];
-    seleccionadasGlobal = [];
-    faccionBloqueadaGlobal = null;
-    belicosaGarantizadaGlobal = null;
-    numJugadoresGlobal = 0;
 }
 
-
+/**
+ * Event Listener: Botón "Sugerir Facciones"
+ * Prepara el estado inicial del draft.
+ */
 sugerirBtn.addEventListener('click', () => {
     
-    
     const checks = document.querySelectorAll('.hireling-check:checked');
-
     let excluidas = Array.from(checks).map(cb => cb.value);
 
     if (excluidas.includes("Vagabundo (N)")) {
-   
         excluidas.push("Vagabundo (B)");
     }
 
-
-
     numJugadoresGlobal = parseInt(document.getElementById('numJugadores').value) || 4;
-
 
     const belicosas = facciones.filter(f => 
         f.tipo === 'belicosa' && !excluidas.includes(f.nombre)
@@ -419,23 +421,19 @@ sugerirBtn.addEventListener('click', () => {
         f.tipo === 'insurgente' && !excluidas.includes(f.nombre)
     );
     
-  
     if (belicosas.length === 0) {
         sugerenciasResultado.innerHTML = `<div class="text-red-400 text-sm p-2 bg-red-900/50 rounded-md">Error: Has excluido a todas las facciones Belicosas. No se puede generar un grupo.</div>`;
         return;
     }
 
-
     let poolBelicosas = shuffleArray([...belicosas]);
     let poolInsurgentes = shuffleArray([...insurgentes]);
     let sugeridas = [];
-
 
     const belicosaGarantizada = poolBelicosas.pop();
     if (belicosaGarantizada) {
         sugeridas.push(belicosaGarantizada);
     }
-
 
     let mazoRestante = shuffleArray([...poolBelicosas, ...poolInsurgentes]);
     for (let i = 0; i < numJugadoresGlobal; i++) {
@@ -444,7 +442,6 @@ sugerirBtn.addEventListener('click', () => {
         }
     }
     
-
     const ultimaFaccion = sugeridas[sugeridas.length - 1];
     const numBelicosasTotal = sugeridas.filter(f => f.tipo === 'belicosa').length;
     let faccionBloqueada = null;
@@ -453,28 +450,19 @@ sugerirBtn.addEventListener('click', () => {
         faccionBloqueada = ultimaFaccion; 
     }
     
-
-    sugeridasGlobal = shuffleArray(sugeridas); 
-    seleccionadasGlobal = []; 
+    sugeridasGlobal = shuffleArray(sugeridas);
+    seleccionadasGlobal = [];
     faccionBloqueadaGlobal = faccionBloqueada ? faccionBloqueada.nombre : null;
     belicosaGarantizadaGlobal = belicosaGarantizada ? belicosaGarantizada.nombre : null;
 
 sugerenciasResultado.addEventListener('click', (e) => {
     
-
     const closeBtn = e.target.closest('#closeSugerenciasBtn');
     if (closeBtn) {
-
-        sugerenciasResultado.innerHTML = '';
-
-        sugeridasGlobal = [];
-        seleccionadasGlobal = [];
-        faccionBloqueadaGlobal = null;
-        belicosaGarantizadaGlobal = null;
-        numJugadoresGlobal = 0;
-        return;
+    
+        resetDraftState(); 
+        return; 
     }
-
 
     const acceptBtn = e.target.closest('#aceptarSugerenciasBtn');
     if (acceptBtn) {
@@ -491,34 +479,26 @@ sugerenciasResultado.addEventListener('click', (e) => {
     const belicosaElegida = seleccionadasGlobal.includes(belicosaGarantizadaGlobal);
     const isBlocked = (faccionNombre === faccionBloqueadaGlobal && !belicosaElegida);
     
-
     if (isBlocked) {
         return; 
     }
 
-
     const index = seleccionadasGlobal.indexOf(faccionNombre);
     
     if (index > -1) {
-
         seleccionadasGlobal.splice(index, 1);
 
-  
         if (faccionNombre === belicosaGarantizadaGlobal) {
-
             const indexBloqueada = seleccionadasGlobal.indexOf(faccionBloqueadaGlobal);
             if (indexBloqueada > -1) {
                 seleccionadasGlobal.splice(indexBloqueada, 1);
             }
         }
 
-
     } else {
-
         if (seleccionadasGlobal.length < numJugadoresGlobal) {
             seleccionadasGlobal.push(faccionNombre);
         } else {
-  
             return;
         }
     }
