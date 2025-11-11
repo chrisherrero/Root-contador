@@ -10,6 +10,8 @@ const iniciarBtn = document.getElementById('iniciarBtn');
 const resetBtn = document.getElementById('resetBtn');
 const switchAlcance = document.getElementById('switchAlcance');
 const maxPuntosInput = document.getElementById('maxPuntos');
+const sugerirFaccionesBtn = document.getElementById('sugerirFaccionesBtn');
+const hirelingChecks = document.querySelectorAll('.hireling-check');
 
 const tableroJuego = document.getElementById('tableroJuego');
 const volverBtn = document.getElementById('volverBtn');
@@ -367,7 +369,19 @@ const tableroOrdenable = document.getElementById('tableroJuego');
         }
     });
 
+if (typeof resetDraftState === 'function') {
+        resetDraftState();
+    }
 
+    sugerirFaccionesBtn.disabled = true;
+    sugerirFaccionesBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    sugerirFaccionesBtn.style.pointerEvents = 'none'; 
+    hirelingChecks.forEach(check => {
+        check.disabled = true;
+        check.parentElement.classList.add('opacity-50', 'cursor-not-allowed');
+        check.parentElement.style.pointerEvents = 'none'; 
+    });
+    
 pantallaConfig.classList.remove('activa');
 pantallaConfig.classList.add('pantalla');
 pantallaJuego.classList.remove('pantalla');
@@ -409,6 +423,16 @@ function guardarEstadoJuego() {
 
 function volverAConfig(){
 localStorage.removeItem('rootJuego'); 
+
+sugerirFaccionesBtn.disabled = false;
+    sugerirFaccionesBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    sugerirFaccionesBtn.style.pointerEvents = 'auto';
+
+    hirelingChecks.forEach(check => {
+        check.disabled = false;
+        check.parentElement.classList.remove('opacity-50', 'cursor-not-allowed');
+        check.parentElement.style.pointerEvents = 'auto';
+    });
 
 pantallaJuego.classList.remove('activa');
 pantallaJuego.classList.add('pantalla');
@@ -493,6 +517,7 @@ window.addEventListener('orientationchange', () => {
         }
     }, 100);
 });
+
 
 
 
