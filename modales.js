@@ -46,7 +46,7 @@ const closeQR = document.getElementById('closeQR');
 const qrPlaceholder = document.getElementById('qr-placeholder');
 let qrCode = null;
 
-const linkParaElQR = "https://root.seiyria.com/";
+const linkParaElQR = "https://root-companion.pages.dev/";
 
 function openQRModal(e) {
     e.preventDefault();
@@ -484,6 +484,7 @@ sugerenciasResultado.addEventListener('click', (e) => {
     renderSugerencias();
 });
     
+
 
 
 
