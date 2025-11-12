@@ -328,6 +328,13 @@ overflow: hidden;
     100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
 }
 
+#openPreparations {
+
+    top: 1rem; 
+    
+
+    top: calc(1rem + env(safe-area-inset-top));
+}
 
 
 
