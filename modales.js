@@ -14,6 +14,9 @@ const alcanceHelpBtn = document.getElementById('alcanceHelpBtn');
 const openGuiaModalBtn = document.getElementById('openGuiaModal');
 const guiaModal = document.getElementById('guiaModal');
 const closeGuiaModalBtn = document.getElementById('closeGuiaModal');
+const guiaImg = document.getElementById('guiaImg');
+const guiaImgContainer = document.getElementById('guiaImgContainer');
+let panzoomInstance = null;
 
 
 function closeAllModals() {
@@ -78,6 +81,42 @@ openGuiaModalBtn.addEventListener('click', () => {
     guiaModal.classList.add('flex');
     guiaModal.querySelector('.custom-scroll').scrollTop = 0;
     document.body.classList.add("no-scroll");
+
+   
+    if (!panzoomInstance) {
+        panzoomInstance = Panzoom(guiaImg, {
+            canvas: true,
+            maxScale: 5,       
+            minScale: 1,       
+            contain: 'outside', 
+            handleStartEvent: e => { 
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+        
+     
+        guiaImgContainer.addEventListener('wheel', panzoomInstance.zoomWithWheel);
+
+  
+        guiaImg.addEventListener('dblclick', () => panzoomInstance.reset());
+    }
+
+});
+
+closeQR.addEventListener('click', function() {
+    qrModal.classList.add('hidden');
+    qrModal.classList.remove('flex');
+    document.body.classList.remove("no-scroll");
+});
+
+closeGuiaModalBtn.addEventListener('click', () => {
+    guiaModal.classList.add('hidden');
+    guiaModal.classList.remove('flex');
+
+    if (prepOverlay.classList.contains('hidden') && qrModal.classList.contains('hidden')) {
+        document.body.classList.remove("no-scroll");
+    }
 });
 
 closeQR.addEventListener('click', function() {
@@ -470,6 +509,7 @@ sugerenciasResultado.addEventListener('click', (e) => {
     renderSugerencias();
 });
     
+
 
 
 
